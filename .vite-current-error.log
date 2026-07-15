@@ -1,0 +1,37 @@
+[2m09:41:51[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [31m[Unhandled error] [1mTypeError[22m: Cannot read properties of null (reading 'ox')
+[39m > src/main.jsx:161:112
+    159 |    }, [onClose])
+    160 |    const pointerDown = e => { drag.current = { x:e.clientX, y:e.clientY, ox:view.x, oy:view.y }; e.currentTarget.setPo...
+    161 |  ...ew.scale === 1) return; setView(v => ({...v, x:drag.current.ox+e.clientX-drag.current.x, y:drag.current.oy+e.clien...
+        |                                                                 ^
+    162 |    return <motion.div className="lightbox" initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}} onClick={onC...
+    163 |      <div className="lightbox-bar"><div><span>{project.no} / {String(portfolioProjects.length).padStart(2,'0')}</span>...
+ > basicStateReducer node_modules/react-dom/cjs/react-dom-client.development.js:7935:44
+ > updateReducerImpl node_modules/react-dom/cjs/react-dom-client.development.js:8048:16
+ > updateReducer node_modules/react-dom/cjs/react-dom-client.development.js:7968:13
+ > Object.useState node_modules/react-dom/cjs/react-dom-client.development.js:26511:17
+ > exports.useState node_modules/react/cjs/react.development.js:1263:33
+ > Lightbox src/main.jsx:150:26
+ > Object.react_stack_bottom_frame node_modules/react-dom/cjs/react-dom-client.development.js:25904:19
+ > renderWithHooks node_modules/react-dom/cjs/react-dom-client.development.js:7662:21
+ > updateFunctionComponent node_modules/react-dom/cjs/react-dom-client.development.js:10166:18
+
+[2m09:41:51[22m [33m[1m[vite][22m[39m [33m[2m(client)[22m[39m [2m[console.warn] [22mAn error occurred in the <Lightbox> component.
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://react.dev/link/error-boundaries to learn more about error boundaries.
+
+[2m09:42:35[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mYou are calling ReactDOMClient.createRoot() on a container that has already been passed to createRoot() before. Instead, call root.render() on the existing root instead if you want to update it.
+[2m09:46:34[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mYou are calling ReactDOMClient.createRoot() on a container that has already been passed to createRoot() before. Instead, call root.render() on the existing root instead if you want to update it.
+[2m09:49:37[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mYou are calling ReactDOMClient.createRoot() on a container that has already been passed to createRoot() before. Instead, call root.render() on the existing root instead if you want to update it.
+[2m09:50:09[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mYou are calling ReactDOMClient.createRoot() on a container that has already been passed to createRoot() before. Instead, call root.render() on the existing root instead if you want to update it.
+[2m09:58:58[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mYou are calling ReactDOMClient.createRoot() on a container that has already been passed to createRoot() before. Instead, call root.render() on the existing root instead if you want to update it.
+[2m09:58:58[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mYou are calling ReactDOMClient.createRoot() on a container that has already been passed to createRoot() before. Instead, call root.render() on the existing root instead if you want to update it.
+[2m09:59:33[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mYou are calling ReactDOMClient.createRoot() on a container that has already been passed to createRoot() before. Instead, call root.render() on the existing root instead if you want to update it.
+[2m09:59:33[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mYou are calling ReactDOMClient.createRoot() on a container that has already been passed to createRoot() before. Instead, call root.render() on the existing root instead if you want to update it.
+[2m10:15:17[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mYou are calling ReactDOMClient.createRoot() on a container that has already been passed to createRoot() before. Instead, call root.render() on the existing root instead if you want to update it.
+[2m10:15:17[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mYou are calling ReactDOMClient.createRoot() on a container that has already been passed to createRoot() before. Instead, call root.render() on the existing root instead if you want to update it.
+[2m10:16:21[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mYou are calling ReactDOMClient.createRoot() on a container that has already been passed to createRoot() before. Instead, call root.render() on the existing root instead if you want to update it.
+[2m10:49:21[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mYou are calling ReactDOMClient.createRoot() on a container that has already been passed to createRoot() before. Instead, call root.render() on the existing root instead if you want to update it.
+[2m10:51:36[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mYou are calling ReactDOMClient.createRoot() on a container that has already been passed to createRoot() before. Instead, call root.render() on the existing root instead if you want to update it.
+[2m10:51:36[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mYou are calling ReactDOMClient.createRoot() on a container that has already been passed to createRoot() before. Instead, call root.render() on the existing root instead if you want to update it.
