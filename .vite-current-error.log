@@ -39,3 +39,198 @@ Visit https://react.dev/link/error-boundaries to learn more about error boundari
 [2m11:14:38[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mYou are calling ReactDOMClient.createRoot() on a container that has already been passed to createRoot() before. Instead, call root.render() on the existing root instead if you want to update it.
 [2m11:26:07[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mYou are calling ReactDOMClient.createRoot() on a container that has already been passed to createRoot() before. Instead, call root.render() on the existing root instead if you want to update it.
 [2m11:26:40[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mYou are calling ReactDOMClient.createRoot() on a container that has already been passed to createRoot() before. Instead, call root.render() on the existing root instead if you want to update it.
+[2m11:55:19[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mYou are calling ReactDOMClient.createRoot() on a container that has already been passed to createRoot() before. Instead, call root.render() on the existing root instead if you want to update it.
+[2m11:58:02[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mYou are calling ReactDOMClient.createRoot() on a container that has already been passed to createRoot() before. Instead, call root.render() on the existing root instead if you want to update it.
+[2m12:09:48[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mYou are calling ReactDOMClient.createRoot() on a container that has already been passed to createRoot() before. Instead, call root.render() on the existing root instead if you want to update it.
+[2m12:15:14[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22mYou are calling ReactDOMClient.createRoot() on a container that has already been passed to createRoot() before. Instead, call root.render() on the existing root instead if you want to update it.
+[2m12:28:42[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "three/examples/jsm/controls/OrbitControls.js" from "src/ModelViewer.jsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mE:/文档/Zp project/src/ModelViewer.jsx[39m:24:56
+[33m  109 |  				});
+  110 |  				if (!preview) {
+  111 |  					const { OrbitControls } = await import("three/examples/jsm/controls/OrbitControls.js");
+      |                                              ^
+  112 |  					if (disposed) return;
+  113 |  					controls = new OrbitControls(camera, renderer.domElement);[39m
+[2m12:28:42[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "three/examples/jsm/controls/OrbitControls.js" from "src/ModelViewer.jsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mE:/文档/Zp project/src/ModelViewer.jsx[39m:24:56
+[33m  109 |  				});
+  110 |  				if (!preview) {
+  111 |  					const { OrbitControls } = await import("three/examples/jsm/controls/OrbitControls.js");
+      |                                              ^
+  112 |  					if (disposed) return;
+  113 |  					controls = new OrbitControls(camera, renderer.domElement);[39m
+[2m12:28:42[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "three" from "src/ModelViewer.jsx". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mE:/文档/Zp project/src/ModelViewer.jsx[39m:14:33
+[33m  28 |  		const start = async () => {
+  29 |  			try {
+  30 |  				const THREE = await import("three"), { GLTFLoader } = await import("three/examples/jsm/loaders/GLTFLoader.js");
+     |                                 ^
+  31 |  				if (disposed) return;
+  32 |  				renderer = new THREE.WebGLRenderer({[39m
+      at TransformPluginContext._formatLog (file:///E:/%E6%96%87%E6%A1%A3/Zp%20project/node_modules/vite/dist/node/chunks/node.js:30366:39)
+      at TransformPluginContext.error (file:///E:/%E6%96%87%E6%A1%A3/Zp%20project/node_modules/vite/dist/node/chunks/node.js:30363:14)
+      at normalizeUrl (file:///E:/%E6%96%87%E6%A1%A3/Zp%20project/node_modules/vite/dist/node/chunks/node.js:27393:18)
+      at async file:///E:/%E6%96%87%E6%A1%A3/Zp%20project/node_modules/vite/dist/node/chunks/node.js:27456:30
+      at async Promise.all (index 3)
+      at async TransformPluginContext.transform (file:///E:/%E6%96%87%E6%A1%A3/Zp%20project/node_modules/vite/dist/node/chunks/node.js:27424:4)
+      at async EnvironmentPluginContainer.transform (file:///E:/%E6%96%87%E6%A1%A3/Zp%20project/node_modules/vite/dist/node/chunks/node.js:30151:14)
+      at async loadAndTransform (file:///E:/%E6%96%87%E6%A1%A3/Zp%20project/node_modules/vite/dist/node/chunks/node.js:20098:26)
+      at async viteTransformMiddleware (file:///E:/%E6%96%87%E6%A1%A3/Zp%20project/node_modules/vite/dist/node/chunks/node.js:24559:20)
+[2m12:28:42[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] Failed to reload /src/main.jsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+[2m12:28:42[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "three/examples/jsm/loaders/GLTFLoader.js" from "src/ModelViewer.jsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mE:/文档/Zp project/src/ModelViewer.jsx[39m:14:68
+[33m  28 |  		const start = async () => {
+  29 |  			try {
+  30 |  				const THREE = await import("three"), { GLTFLoader } = await import("three/examples/jsm/loaders/GLTFLoader.js");
+     |                                                                         ^
+  31 |  				if (disposed) return;
+  32 |  				renderer = new THREE.WebGLRenderer({[39m
+[2m12:28:42[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "three/examples/jsm/loaders/GLTFLoader.js" from "src/ModelViewer.jsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mE:/文档/Zp project/src/ModelViewer.jsx[39m:14:68
+[33m  28 |  		const start = async () => {
+  29 |  			try {
+  30 |  				const THREE = await import("three"), { GLTFLoader } = await import("three/examples/jsm/loaders/GLTFLoader.js");
+     |                                                                         ^
+  31 |  				if (disposed) return;
+  32 |  				renderer = new THREE.WebGLRenderer({[39m
+[2m12:31:21[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "three/examples/jsm/loaders/GLTFLoader.js" from "src/ModelViewer.jsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mE:/文档/Zp project/src/ModelViewer.jsx[39m:14:68
+[33m  28 |  		const start = async () => {
+  29 |  			try {
+  30 |  				const THREE = await import("three"), { GLTFLoader } = await import("three/examples/jsm/loaders/GLTFLoader.js");
+     |                                                                         ^
+  31 |  				if (disposed) return;
+  32 |  				renderer = new THREE.WebGLRenderer({[39m
+[2m12:31:21[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "three/examples/jsm/loaders/GLTFLoader.js" from "src/ModelViewer.jsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mE:/文档/Zp project/src/ModelViewer.jsx[39m:14:68
+[33m  28 |  		const start = async () => {
+  29 |  			try {
+  30 |  				const THREE = await import("three"), { GLTFLoader } = await import("three/examples/jsm/loaders/GLTFLoader.js");
+     |                                                                         ^
+  31 |  				if (disposed) return;
+  32 |  				renderer = new THREE.WebGLRenderer({[39m
+[2m12:31:21[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "three" from "src/ModelViewer.jsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mE:/文档/Zp project/src/ModelViewer.jsx[39m:14:33
+[33m  28 |  		const start = async () => {
+  29 |  			try {
+  30 |  				const THREE = await import("three"), { GLTFLoader } = await import("three/examples/jsm/loaders/GLTFLoader.js");
+     |                                 ^
+  31 |  				if (disposed) return;
+  32 |  				renderer = new THREE.WebGLRenderer({[39m
+[2m12:31:21[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "three" from "src/ModelViewer.jsx". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mE:/文档/Zp project/src/ModelViewer.jsx[39m:14:33
+[33m  28 |  		const start = async () => {
+  29 |  			try {
+  30 |  				const THREE = await import("three"), { GLTFLoader } = await import("three/examples/jsm/loaders/GLTFLoader.js");
+     |                                 ^
+  31 |  				if (disposed) return;
+  32 |  				renderer = new THREE.WebGLRenderer({[39m
+      at TransformPluginContext._formatLog (file:///E:/%E6%96%87%E6%A1%A3/Zp%20project/node_modules/vite/dist/node/chunks/node.js:30366:39)
+      at TransformPluginContext.error (file:///E:/%E6%96%87%E6%A1%A3/Zp%20project/node_modules/vite/dist/node/chunks/node.js:30363:14)
+      at normalizeUrl (file:///E:/%E6%96%87%E6%A1%A3/Zp%20project/node_modules/vite/dist/node/chunks/node.js:27393:18)
+      at async file:///E:/%E6%96%87%E6%A1%A3/Zp%20project/node_modules/vite/dist/node/chunks/node.js:27456:30
+      at async Promise.all (index 3)
+      at async TransformPluginContext.transform (file:///E:/%E6%96%87%E6%A1%A3/Zp%20project/node_modules/vite/dist/node/chunks/node.js:27424:4)
+      at async EnvironmentPluginContainer.transform (file:///E:/%E6%96%87%E6%A1%A3/Zp%20project/node_modules/vite/dist/node/chunks/node.js:30151:14)
+      at async loadAndTransform (file:///E:/%E6%96%87%E6%A1%A3/Zp%20project/node_modules/vite/dist/node/chunks/node.js:20098:26)
+[2m12:31:21[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] Failed to reload /src/main.jsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+[2m12:31:21[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] Failed to reload /src/main.jsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+[2m12:33:51[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "three/examples/jsm/loaders/GLTFLoader.js" from "src/ModelViewer.jsx". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mE:/文档/Zp project/src/ModelViewer.jsx[39m:43:25
+[33m  28 |  		const start = async () => {
+  29 |  			try {
+  30 |  				const THREE = await import("three"), { GLTFLoader } = await import("three/examples/jsm/loaders/GLTFLoader.js");
+     |                                                                         ^
+  31 |  				if (disposed) return;
+  32 |  				renderer = new THREE.WebGLRenderer({[39m
+      at TransformPluginContext._formatLog (file:///E:/%E6%96%87%E6%A1%A3/Zp%20project/node_modules/vite/dist/node/chunks/node.js:30366:39)
+      at TransformPluginContext.error (file:///E:/%E6%96%87%E6%A1%A3/Zp%20project/node_modules/vite/dist/node/chunks/node.js:30363:14)
+      at normalizeUrl (file:///E:/%E6%96%87%E6%A1%A3/Zp%20project/node_modules/vite/dist/node/chunks/node.js:27393:18)
+      at async file:///E:/%E6%96%87%E6%A1%A3/Zp%20project/node_modules/vite/dist/node/chunks/node.js:27456:30
+      at async Promise.all (index 4)
+      at async TransformPluginContext.transform (file:///E:/%E6%96%87%E6%A1%A3/Zp%20project/node_modules/vite/dist/node/chunks/node.js:27424:4)
+      at async EnvironmentPluginContainer.transform (file:///E:/%E6%96%87%E6%A1%A3/Zp%20project/node_modules/vite/dist/node/chunks/node.js:30151:14)
+      at async loadAndTransform (file:///E:/%E6%96%87%E6%A1%A3/Zp%20project/node_modules/vite/dist/node/chunks/node.js:20098:26)
+[2m12:33:51[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "three/examples/jsm/loaders/GLTFLoader.js" from "src/ModelViewer.jsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mE:/文档/Zp project/src/ModelViewer.jsx[39m:43:25
+[33m  28 |  		const start = async () => {
+  29 |  			try {
+  30 |  				const THREE = await import("three"), { GLTFLoader } = await import("three/examples/jsm/loaders/GLTFLoader.js");
+     |                                                                         ^
+  31 |  				if (disposed) return;
+  32 |  				renderer = new THREE.WebGLRenderer({[39m
+[2m12:33:51[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "three/examples/jsm/loaders/GLTFLoader.js" from "src/ModelViewer.jsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mE:/文档/Zp project/src/ModelViewer.jsx[39m:43:25
+[33m  28 |  		const start = async () => {
+  29 |  			try {
+  30 |  				const THREE = await import("three"), { GLTFLoader } = await import("three/examples/jsm/loaders/GLTFLoader.js");
+     |                                                                         ^
+  31 |  				if (disposed) return;
+  32 |  				renderer = new THREE.WebGLRenderer({[39m
+[2m12:33:51[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] Failed to reload /src/main.jsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+[2m12:35:25[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "three/examples/jsm/loaders/GLTFLoader.js" from "src/ModelViewer.jsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mE:/文档/Zp project/src/ModelViewer.jsx[39m:43:25
+[33m  28 |  		const start = async () => {
+  29 |  			try {
+  30 |  ...HREE = await import("three"), { GLTFLoader } = await import("three/examples/jsm/loaders/GLTFLoader.js"), { Meshopt...
+     |                                                                 ^
+  31 |  				if (disposed) return;
+  32 |  				renderer = new THREE.WebGLRenderer({[39m
+[2m12:35:25[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "three" from "src/ModelViewer.jsx". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mE:/文档/Zp project/src/ModelViewer.jsx[39m:41:35
+[33m  28 |  		const start = async () => {
+  29 |  			try {
+  30 |  				const THREE = await import("three"), { GLTFLoader } = await import("three/examples/jsm/loaders/GLTFLoader.js"), {...
+     |                                 ^
+  31 |  				if (disposed) return;
+  32 |  				renderer = new THREE.WebGLRenderer({[39m
+      at TransformPluginContext._formatLog (file:///E:/%E6%96%87%E6%A1%A3/Zp%20project/node_modules/vite/dist/node/chunks/node.js:30366:39)
+      at TransformPluginContext.error (file:///E:/%E6%96%87%E6%A1%A3/Zp%20project/node_modules/vite/dist/node/chunks/node.js:30363:14)
+      at normalizeUrl (file:///E:/%E6%96%87%E6%A1%A3/Zp%20project/node_modules/vite/dist/node/chunks/node.js:27393:18)
+      at async file:///E:/%E6%96%87%E6%A1%A3/Zp%20project/node_modules/vite/dist/node/chunks/node.js:27456:30
+      at async Promise.all (index 3)
+      at async TransformPluginContext.transform (file:///E:/%E6%96%87%E6%A1%A3/Zp%20project/node_modules/vite/dist/node/chunks/node.js:27424:4)
+      at async EnvironmentPluginContainer.transform (file:///E:/%E6%96%87%E6%A1%A3/Zp%20project/node_modules/vite/dist/node/chunks/node.js:30151:14)
+      at async loadAndTransform (file:///E:/%E6%96%87%E6%A1%A3/Zp%20project/node_modules/vite/dist/node/chunks/node.js:20098:26)
+[2m12:35:25[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "three" from "src/ModelViewer.jsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mE:/文档/Zp project/src/ModelViewer.jsx[39m:41:35
+[33m  28 |  		const start = async () => {
+  29 |  			try {
+  30 |  				const THREE = await import("three"), { GLTFLoader } = await import("three/examples/jsm/loaders/GLTFLoader.js"), {...
+     |                                 ^
+  31 |  				if (disposed) return;
+  32 |  				renderer = new THREE.WebGLRenderer({[39m
+[2m12:35:25[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m [2m[console.error] [22m[vite] Failed to reload /src/main.jsx. This could be due to syntax errors or importing non-existent modules. (see errors above)
+[2m12:35:25[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "three" from "src/ModelViewer.jsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mE:/文档/Zp project/src/ModelViewer.jsx[39m:41:35
+[33m  28 |  		const start = async () => {
+  29 |  			try {
+  30 |  				const THREE = await import("three"), { GLTFLoader } = await import("three/examples/jsm/loaders/GLTFLoader.js"), {...
+     |                                 ^
+  31 |  				if (disposed) return;
+  32 |  				renderer = new THREE.WebGLRenderer({[39m
+[2m12:35:25[22m [31m[1m[vite][22m[39m [31m[2m(client)[22m[39m Pre-transform error: Failed to resolve import "three" from "src/ModelViewer.jsx". Does the file exist?
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mE:/文档/Zp project/src/ModelViewer.jsx[39m:41:35
+[33m  28 |  		const start = async () => {
+  29 |  			try {
+  30 |  				const THREE = await import("three"), { GLTFLoader } = await import("three/examples/jsm/loaders/GLTFLoader.js"), {...
+     |                                 ^
+  31 |  				if (disposed) return;
+  32 |  				renderer = new THREE.WebGLRenderer({[39m

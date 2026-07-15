@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
+import { flushSync } from "react-dom";
 import {
   AnimatePresence,
   motion,
@@ -24,10 +25,20 @@ import {
   Users,
   Sparkles,
   FolderKanban,
+  Play,
+  Pause,
+  SlidersHorizontal,
+  ChevronDown,
+  Volume2,
+  VolumeX,
 } from "lucide-react";
 import LogoLoop from "./LogoLoop";
 import TextPressure from "./TextPressure";
+import ModelViewer from "./ModelViewer";
+import "./model-overrides.css";
 import worksManifest from "virtual:works-manifest";
+import savedProjectCopy from "./assets/project-copy.json";
+import profilePortrait from "./assets/profile-rw.png";
 import "./styles.css";
 import "./masonry.css";
 import "./experience.css";
@@ -49,6 +60,15 @@ import "./filmstrip-polish.css";
 import "./detail-controls.css";
 import "./hero-signature.css";
 import "./performance.css";
+import "./career-content.css";
+import "./copy-contact.css";
+import "./nav-active.css";
+import "./media-works.css";
+import "./editable-project.css";
+import "./work-filter.css";
+import "./drag-performance.css";
+import "./filmstrip-scrub.css";
+import "./profile-image.css";
 
 const projects = [
   {
@@ -164,18 +184,21 @@ const uploadedProjects = worksManifest.map((file, i) => ({
   id: file.id,
   no: String(i + 1).padStart(2, "0"),
   title: file.name.replace(/[-_]/g, " "),
-  role: "个人作品 · 原画设计",
-  tag: "",
-  layout: "natural",
+  role: file.type === "model" ? "三维模型 · 材质展示" : file.type === "video" ? "动态影像 · 视频作品" : file.type === "gif" ? "动态设计 · GIF 作品" : "个人作品 · 原画设计",
+  tag: file.type === "model" ? "3D MODEL" : file.type === "video" ? "MP4 VIDEO" : file.type === "gif" ? "GIF MOTION" : "",
+  type: file.type,
+  layout: file.type === "model" ? "model" : "natural",
   image: file.image,
   mtime: file.mtime,
 }));
-const portfolioProjects = uploadedProjects.length
-  ? uploadedProjects
-  : projects.map((p) => ({ ...p, id: `placeholder-${p.no}` }));
+const portfolioProjects = [
+  ...uploadedProjects,
+  ...projects.map((p) => ({ ...p, id: `placeholder-${p.no}`, type: "image" })),
+].map((project) => ({ ...project, ...(savedProjectCopy[project.id] || {}) }));
 const projectForNo = (no) =>
   portfolioProjects.find((p) => p.no === no) ||
   portfolioProjects[(Number(no) - 1) % portfolioProjects.length];
+const modelPreviewCache = new Map();
 
 const strengths = [
   {
@@ -210,11 +233,14 @@ const career = [
     company: "成都趣乐多科技",
     role: "游戏主美",
     projectNo: "01",
-    detail: "主导多项目美术风格与研发标准搭建，负责核心视觉方向与团队交付。",
+    detail: "负责项目美术标准、视觉方向、协作机制与团队培养，推动 AI 技术在美术生产中的实际应用。",
     more: [
-      "拆解项目研发需求，建立美术、动作与特效协同机制，主导 30+ 动效设计质量达标。",
-      "搭建美术资产库与规范体系，统一角色、场景、道具、技能图标及 UI 视觉标准。",
-      "推动 AI 工具与美术流程融合，制定生产规范并完成团队培训，有效提升探索与交付效率。",
+      "拆解项目研发需求并制定节点计划，建立美术、动作与特效的协同沟通机制，主导 30+ 动效设计，质量达标率 97.5%。",
+      "整合 2000+ 存量素材并建立美术资产库，素材复用率提升 65%，产品定向需求调整周期缩短 30%；规范 30+ 外包项目，按周校准进度并及时反馈修改意见。",
+      "设计并绘制新功能所需的场景、角色、怪物、道具、技能图标、装备等美术内容；融合 Midjourney 与 Stable Diffusion，团队产能提升 35%，推进 AI 辅助设计标准化流程。",
+      "制定角色、场景与交互界面的表现技法规范，完成移动端至 H5 的美术资源适配优化，确保多端视觉一致性达到 95%。",
+      "构建初中级美术人才培养体系，开发 3 门核心课程并带教 6 人，其中 2 人在 6 个月内能够独立承接项目。",
+      "主导 AI 技术落地，训练 2 套完整的风格化模型，制定 AI 生产流程，辅导 10+ 同事掌握相关工具，草图效率提升 70%。",
     ],
   },
   {
@@ -222,23 +248,23 @@ const career = [
     company: "北京贝塔科技",
     role: "场景美术",
     projectNo: "02",
-    detail: "输出高质量游戏场景、外景及宣传图，负责交互表现与资源迭代。",
+    detail: "依据主策需求完成游戏主场景、外景、宣传图与活动场景，负责交互内容和美术资源迭代。",
     more: [
-      "根据主策需求控制场景氛围、空间层次及宣传图品质。",
-      "负责场景交互插件、道具设计及资源分层，针对反馈持续迭代。",
-      "统筹协调各组美术资源，使项目作品在风格、色彩与造型上保持统一。",
+      "根据主策需求，按时绘制符合质量要求的游戏主场景、外景、宣传图及活动场景。",
+      "负责场景交互物件、道具设计及升降级、换装等作品呈现，并有针对性地更新迭代既有美术资源。",
+      "统筹协调各组提交的美术资源，使项目中的美术作品在风格、色彩与造型上保持协调统一。",
     ],
   },
   {
     period: "2020.07 — 2022.05",
-    company: "成都美有利有限公司",
+    company: "成都美有科技有限公司",
     role: "高级场景",
     projectNo: "03",
-    detail: "负责多风格场景、转场 CG、气氛图及道具设计与品质交付。",
+    detail: "依据客户文案与项目设定完成多风格场景设计，负责测试沟通、任务拆分和外包项目交付。",
     more: [
-      "依据客户需求完成世界观场景、转场 CG、气氛图与道具设计。",
-      "参与项目测试与需求沟通，拆分制作任务并协助初级同事完成场景绘制。",
-      "推进外包项目拆分、制作与反馈，解决资源需求变化并保证最终交付质量。",
+      "按照甲方客户的文案需求，设计符合设定氛围的场景图，包括但不限于战斗场景、转场 CG、气氛图设定、道具、古风与 Q 版建筑等内容。",
+      "负责绘制项目测试作品，参与测试及客户需求沟通，拆分项目元素并协助初级同事完成场景绘制，提升组内实力与市场竞争力。",
+      "推进各项外包项目，及时对已通过的项目进行拆分归档；制作时准确把握客户的美术特点并针对性完善，按时、按要求完成工作内容。",
     ],
   },
   {
@@ -246,11 +272,11 @@ const career = [
     company: "成都亚然科技",
     role: "原画设计师",
     projectNo: "04",
-    detail: "参与自研项目角色、过场动画、道具与场景地图设计。",
+    detail: "负责公司自研项目的角色、场景地图、过场动画、道具特效及 UI 原画设计。",
     more: [
-      "负责《乘玩》等自研项目的角色、过场动画、道具与 20 余张场景地图设计。",
-      "完成项目风格研究与创新探索，持续制作激励视频及节日运营素材。",
-      "推进产品启动页、加载页、过场动画及道具特效的视觉优化。",
+      "负责公司研发项目《莱玩》的美术设计，包括角色、过场动画、道具及 20 余张场景地图设计。",
+      "设定项目风格并探索创新玩法，持续提升项目品质，优化美宣素材，制作激励视频等内容以提升用户日活率。",
+      "承担产品启动页、加载页、过场动画、道具特效及 UI 等原画设计，并参与产品交互流程设计。",
     ],
   },
 ];
@@ -318,10 +344,21 @@ function PressureHeading({ lines, delay = 0, className = "" }) {
 
 function Header() {
   const [scrolled, setScrolled] = useState(false),
-    [open, setOpen] = useState(false);
+    [open, setOpen] = useState(false),
+    [activeSection, setActiveSection] = useState("top");
   useEffect(() => {
     let scheduled = false;
-    const update = () => { scheduled = false; setScrolled(scrollY > 80); };
+    const update = () => {
+      scheduled = false;
+      setScrolled(scrollY > 80);
+      const activationLine = innerHeight * 0.38;
+      let currentSection = "top";
+      ["top", "work", "about", "experience", "ability"].forEach((id) => {
+        const section = document.getElementById(id);
+        if (section && section.getBoundingClientRect().top <= activationLine) currentSection = id;
+      });
+      setActiveSection(currentSection);
+    };
     const fn = () => { if (!scheduled) { scheduled = true; requestAnimationFrame(update); } };
     update();
     addEventListener("scroll", fn, { passive: true });
@@ -334,16 +371,19 @@ function Header() {
         <i>ANG</i>
       </a>
       <nav className={open ? "navlinks open" : "navlinks"}>
-        <a href="#work" onClick={() => setOpen(false)}>
+        <a className={activeSection === "top" ? "active" : ""} href="#top" aria-current={activeSection === "top" ? "page" : undefined} onClick={() => setOpen(false)}>
+          首页
+        </a>
+        <a className={activeSection === "work" ? "active" : ""} href="#work" aria-current={activeSection === "work" ? "page" : undefined} onClick={() => setOpen(false)}>
           项目作品
         </a>
-        <a href="#about" onClick={() => setOpen(false)}>
+        <a className={activeSection === "about" ? "active" : ""} href="#about" aria-current={activeSection === "about" ? "page" : undefined} onClick={() => setOpen(false)}>
           关于我
         </a>
-        <a href="#experience" onClick={() => setOpen(false)}>
+        <a className={activeSection === "experience" ? "active" : ""} href="#experience" aria-current={activeSection === "experience" ? "page" : undefined} onClick={() => setOpen(false)}>
           工作履历
         </a>
-        <a href="#ability" onClick={() => setOpen(false)}>
+        <a className={activeSection === "ability" ? "active" : ""} href="#ability" aria-current={activeSection === "ability" ? "page" : undefined} onClick={() => setOpen(false)}>
           个人优势
         </a>
       </nav>
@@ -543,8 +583,8 @@ function Hero() {
           <span>2018 — 2026</span>
         </div>
         <h1>
-          <span>塑造世界，</span>
-          <em>定义视觉。</em>
+          <span>塑造世界</span>
+          <em>定义视觉</em>
         </h1>
         <div className="hero-bottom">
           <motion.div
@@ -633,16 +673,72 @@ function ProfilePortrait() {
         onMouseMove={move}
         onMouseLeave={reset}
       >
-        <div ref={art} className="portrait-art">
-          <span>
-            YANG
-            <br />
-            YANG
-          </span>
+        <div ref={art} className="portrait-art portrait-art-image">
+          <img
+            className="portrait-image portrait-image-base"
+            src={profilePortrait}
+            alt="杨杨 游戏原画设计师与游戏 2D 主美"
+          />
+          <img
+            className="portrait-image portrait-image-ghost"
+            src={profilePortrait}
+            alt=""
+            aria-hidden="true"
+          />
+          <i className="portrait-atmosphere" aria-hidden="true" />
         </div>
         <small>BASED IN CHENGDU · CN</small>
       </div>
     </motion.div>
+  );
+}
+
+function CopyContact({ value, children, variants }) {
+  const [copied, setCopied] = useState(false);
+  const timer = useRef(null);
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(value);
+    } catch {
+      const input = document.createElement("textarea");
+      input.value = value;
+      input.style.position = "fixed";
+      input.style.opacity = "0";
+      document.body.appendChild(input);
+      input.select();
+      document.execCommand("copy");
+      input.remove();
+    }
+    clearTimeout(timer.current);
+    setCopied(true);
+    timer.current = setTimeout(() => setCopied(false), 1200);
+  };
+  useEffect(() => () => clearTimeout(timer.current), []);
+  return (
+    <motion.button
+      type="button"
+      className={`copy-contact ${copied ? "is-copied" : ""}`}
+      variants={variants}
+      onClick={copy}
+      animate={copied ? { scale: [1, 1.12, 0.98, 1] } : { scale: 1 }}
+      transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
+      aria-label={`复制 ${value}`}
+    >
+      {children}
+      <AnimatePresence>
+        {copied && (
+          <motion.span
+            className="copy-toast"
+            role="status"
+            initial={{ opacity: 0, y: 7, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -7, scale: 0.94 }}
+          >
+            已复制
+          </motion.span>
+        )}
+      </AnimatePresence>
+    </motion.button>
   );
 }
 
@@ -709,18 +805,18 @@ function About() {
               },
             }}
           >
-            <motion.a variants={rise} href="mailto:iq.yang@aliyun.com">
+            <CopyContact variants={rise} value="iq.yang@aliyun.com">
               <Mail />
               iq.yang@aliyun.com
-            </motion.a>
-            <motion.a variants={rise} href="tel:13330982143">
+            </CopyContact>
+            <CopyContact variants={rise} value="13330982143">
               <Phone />
               133 3098 2143
-            </motion.a>
-            <motion.span variants={rise}>
+            </CopyContact>
+            <CopyContact variants={rise} value="成都，中国">
               <MapPin />
               成都，中国
-            </motion.span>
+            </CopyContact>
           </motion.div>
         </div>
       </div>
@@ -812,17 +908,247 @@ function CapabilityLoop() {
   );
 }
 
+const formatMediaTime = (seconds) => {
+  if (!Number.isFinite(seconds)) return "00:00";
+  const minutes = Math.floor(seconds / 60);
+  const remainder = Math.floor(seconds % 60);
+  return `${String(minutes).padStart(2, "0")}:${String(remainder).padStart(2, "0")}`;
+};
+
+function GifPreview({ src, alt, interactive = true, active, className = "" }) {
+  const canvasRef = useRef(null);
+  const [localPlaying, setLocalPlaying] = useState(false);
+  const [ratio, setRatio] = useState(null);
+  const playing = active ?? localPlaying;
+  const capturePoster = (event) => {
+    const img = event.currentTarget;
+    const scale = Math.min(1, 720 / Math.max(img.naturalWidth, img.naturalHeight));
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    canvas.width = Math.max(1, Math.round(img.naturalWidth * scale));
+    canvas.height = Math.max(1, Math.round(img.naturalHeight * scale));
+    canvas.getContext("2d")?.drawImage(img, 0, 0, canvas.width, canvas.height);
+    setRatio(img.naturalWidth / img.naturalHeight);
+  };
+  return (
+    <div
+      className={`gif-preview ${playing ? "is-playing" : ""} ${className}`}
+      style={ratio ? { aspectRatio: ratio } : undefined}
+      onMouseEnter={interactive && active === undefined ? () => setLocalPlaying(true) : undefined}
+      onMouseLeave={interactive && active === undefined ? () => setLocalPlaying(false) : undefined}
+    >
+      <canvas ref={canvasRef} aria-hidden="true" />
+      <img
+        key={playing ? "playing" : "poster-loader"}
+        className={playing ? "gif-live" : "gif-loader"}
+        src={src}
+        alt={playing ? alt : ""}
+        onLoad={capturePoster}
+        draggable="false"
+      />
+      <span className="media-kind">GIF</span>
+    </div>
+  );
+}
+
+function VideoDetail({ project }) {
+  const videoRef = useRef(null);
+  const [playing, setPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [volume, setVolume] = useState(1);
+  const [muted, setMuted] = useState(false);
+  const [playbackRate, setPlaybackRate] = useState(1);
+  const [rateOpen, setRateOpen] = useState(false);
+  const rates = [2.5, 1.5, 1.25, 1, 0.75];
+  const toggle = () => {
+    const video = videoRef.current;
+    if (!video) return;
+    if (video.paused) video.play().catch(() => {});
+    else video.pause();
+  };
+  useEffect(() => () => videoRef.current?.pause(), []);
+  const toggleMute = () => {
+    const next = !muted;
+    setMuted(next);
+    if (videoRef.current) videoRef.current.muted = next;
+  };
+  const selectRate = (next) => {
+    setPlaybackRate(next);
+    if (videoRef.current) videoRef.current.playbackRate = next;
+    setRateOpen(false);
+  };
+  return (
+    <div className="video-detail-player">
+      <video
+        ref={videoRef}
+        src={project.image}
+        preload="metadata"
+        playsInline
+        onPlay={() => setPlaying(true)}
+        onPause={() => setPlaying(false)}
+        onEnded={() => setPlaying(false)}
+        onTimeUpdate={(e) => setCurrentTime(e.currentTarget.currentTime)}
+        onLoadedMetadata={(e) => setDuration(e.currentTarget.duration)}
+        onClick={toggle}
+      />
+      {!playing && (
+        <button className="video-center-play" onClick={toggle} aria-label="播放视频">
+          <Play fill="currentColor" />
+        </button>
+      )}
+      <div className="video-controls" onClick={(e) => e.stopPropagation()}>
+        <button onClick={toggle} aria-label={playing ? "暂停" : "播放"}>
+          {playing ? <Pause fill="currentColor" /> : <Play fill="currentColor" />}
+        </button>
+        <span>{formatMediaTime(currentTime)}</span>
+        <input
+          className="video-progress"
+          aria-label="视频进度"
+          type="range"
+          min="0"
+          max={duration || 0}
+          step="0.01"
+          value={Math.min(currentTime, duration || 0)}
+          style={{ "--media-progress": `${duration ? (currentTime / duration) * 100 : 0}%` }}
+          onChange={(e) => {
+            const next = Number(e.target.value);
+            if (videoRef.current) videoRef.current.currentTime = next;
+            setCurrentTime(next);
+          }}
+        />
+        <span>{formatMediaTime(duration)}</span>
+        <div className="video-volume">
+          <button onClick={toggleMute} aria-label={muted || volume === 0 ? "恢复声音" : "静音"}>
+            {muted || volume === 0 ? <VolumeX /> : <Volume2 />}
+          </button>
+          <div className="video-volume-popover">
+            <input
+              aria-label="音量"
+              type="range"
+              min="0"
+              max="1"
+              step="0.01"
+              value={muted ? 0 : volume}
+              style={{ "--volume-level": `${(muted ? 0 : volume) * 100}%` }}
+              onChange={(event) => {
+                const next = Number(event.target.value);
+                setVolume(next);
+                setMuted(next === 0);
+                if (videoRef.current) {
+                  videoRef.current.volume = next;
+                  videoRef.current.muted = next === 0;
+                }
+              }}
+            />
+          </div>
+        </div>
+        <div
+          className={`video-rate-wrap ${rateOpen ? "is-open" : ""}`}
+          onBlur={(event) => {
+            if (!event.currentTarget.contains(event.relatedTarget)) setRateOpen(false);
+          }}
+        >
+          <button className="video-rate" onClick={() => setRateOpen((value) => !value)} aria-expanded={rateOpen} aria-haspopup="menu" aria-label={`当前 ${playbackRate} 倍速　点击选择`}>
+            {playbackRate}×
+          </button>
+          <AnimatePresence>
+            {rateOpen && (
+              <motion.div className="video-rate-menu" role="menu" initial={{ opacity: 0, x: "-50%", y: 8, scaleY: 0.75 }} animate={{ opacity: 1, x: "-50%", y: 0, scaleY: 1 }} exit={{ opacity: 0, x: "-50%", y: 6, scaleY: 0.8 }} transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}>
+                {rates.map((rate) => (
+                  <button key={rate} role="menuitem" className={rate === playbackRate ? "active" : ""} onClick={() => selectRate(rate)}>{rate}×</button>
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const IS_LOCAL_EDITOR = ["localhost", "127.0.0.1"].includes(window.location.hostname);
+
+function EditableText({ as: Tag = "div", value, onCommit, multiline = false, className = "" }) {
+  if (!IS_LOCAL_EDITOR) return <Tag className={className}>{value}</Tag>;
+  const finish = (event) => {
+    const next = event.currentTarget.innerText.replace(/\u00a0/g, " ").trim();
+    if (next && next !== value) onCommit(next);
+    else if (!next) event.currentTarget.innerText = value;
+  };
+  return (
+    <Tag
+      className={`project-editable ${className}`}
+      contentEditable
+      suppressContentEditableWarning
+      role="textbox"
+      aria-multiline={multiline}
+      spellCheck="false"
+      title="点击编辑　失焦自动保存"
+      onBlur={finish}
+      onKeyDown={(event) => {
+        if (!multiline && event.key === "Enter") {
+          event.preventDefault();
+          event.currentTarget.blur();
+        }
+        if (event.key === "Escape") {
+          event.currentTarget.innerText = value;
+          event.currentTarget.blur();
+        }
+      }}
+    >
+      {value}
+    </Tag>
+  );
+}
+
 function Lightbox({ project, onClose, onSelect }) {
   const [view, setView] = useState({ scale: 1, x: 0, y: 0 });
+  const [modelInfo, setModelInfo] = useState(null);
+  const [modelSnapshots, setModelSnapshots] = useState(() => Object.fromEntries(modelPreviewCache));
+  const [projectCopy, setProjectCopy] = useState({});
+  const [scrubIndex, setScrubIndex] = useState(null);
+  const [scrubbing, setScrubbing] = useState(false);
+  const isModel = project.type === "model";
+  const isVideo = project.type === "video";
+  const isGif = project.type === "gif";
   const drag = useRef(null),
     filmRef = useRef(null),
-    stageRef = useRef(null);
+    filmScrub = useRef(null),
+    blockFilmClick = useRef(false),
+    stageRef = useRef(null),
+    viewerRef = useRef(null);
   const currentIndex = portfolioProjects.findIndex(
       (p) => p.id === project.id || p.image === project.image,
     ),
     previousIndex = useRef(currentIndex);
+  const copyDefaults = {
+    tag: project.tag || "PERSONAL WORK",
+    title: project.title,
+    role: project.role,
+    description: project.description || (project.type === "video" ? "以动态镜头呈现完整的视觉节奏与画面设计　可通过底部控制条查看任意时间节点" : project.type === "model" ? "模型支持全方位旋转与缩放查看　右侧数据由模型文件自动读取" : "围绕项目世界观与核心体验展开视觉探索　从前期参考研究　构图与色彩方案　到场景细化和最终研发落地　持续平衡叙事氛围　画面表现与生产可行性"),
+    duty: "概念设计 · 风格研发 · 品质把控",
+    process: project.type === "video" ? "播放 / 暂停 / 拖动进度" : "研究 / 草图 / 色彩 / 细化 / 交付",
+  };
+  const projectCopyKey = project.id || project.image;
+  const copy = { ...copyDefaults, ...(savedProjectCopy[projectCopyKey] || {}), ...projectCopy };
+  const commitCopy = (field, value) => {
+    const next = { ...copy, [field]: value };
+    setProjectCopy(next);
+    localStorage.setItem(`yang-project-copy:${projectCopyKey}`, JSON.stringify(next));
+    window.dispatchEvent(new CustomEvent("project-copy-updated", {
+      detail: { key: projectCopyKey, value: next },
+    }));
+    if (IS_LOCAL_EDITOR) {
+      fetch('/__project-copy', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ key: projectCopyKey, value: next }),
+      }).catch(() => {});
+    }
+  };
   const slideDirection = currentIndex >= previousIndex.current ? 1 : -1;
-  const reset = () => setView({ scale: 1, x: 0, y: 0 });
+  const reset = () => isModel ? viewerRef.current?.reset() : setView({ scale: 1, x: 0, y: 0 });
   const zoomAt = (amount, clientX, clientY) =>
     setView((v) => {
       const nextScale = Math.min(5, Math.max(1, v.scale + amount));
@@ -840,6 +1166,7 @@ function Lightbox({ project, onClose, onSelect }) {
       };
     });
   const zoom = (amount) => {
+    if (isModel) { viewerRef.current?.zoom(amount); return; }
     const r = stageRef.current?.getBoundingClientRect();
     zoomAt(
       amount,
@@ -848,8 +1175,14 @@ function Lightbox({ project, onClose, onSelect }) {
     );
   };
   useEffect(() => {
+    setModelInfo(null);
     reset();
-  }, [project.no]);
+    try {
+      setProjectCopy(JSON.parse(localStorage.getItem(`yang-project-copy:${projectCopyKey}`) || "{}"));
+    } catch {
+      setProjectCopy({});
+    }
+  }, [project.id, project.image]);
   useEffect(() => {
     previousIndex.current = currentIndex;
     requestAnimationFrame(() =>
@@ -886,6 +1219,54 @@ function Lightbox({ project, onClose, onSelect }) {
       y: origin.oy + e.clientY - origin.y,
     }));
   };
+  const beginFilmScrub = (event) => {
+    if (event.button !== 0) return;
+    const container = filmRef.current;
+    const startButton = event.target.closest("button[data-film-index]");
+    if (!container || !startButton) return;
+    const session = { pointerId: event.pointerId, startX: event.clientX, startScroll: container.scrollLeft, active: false, targetIndex: Number(startButton.dataset.filmIndex), timer: 0 };
+    session.timer = window.setTimeout(() => {
+      session.active = true;
+      setScrubbing(true);
+      setScrubIndex(session.targetIndex);
+      container.setPointerCapture?.(session.pointerId);
+    }, 260);
+    filmScrub.current = session;
+  };
+  const moveFilmScrub = (event) => {
+    const session = filmScrub.current;
+    if (!session) return;
+    const distance = event.clientX - session.startX;
+    if (!session.active) {
+      if (Math.abs(distance) > 7) { clearTimeout(session.timer); filmScrub.current = null; }
+      return;
+    }
+    event.preventDefault();
+    const container = filmRef.current;
+    container.scrollLeft = session.startScroll - distance * 1.9;
+    const center = container.getBoundingClientRect().left + container.clientWidth / 2;
+    let nearestIndex = session.targetIndex, nearestDistance = Infinity;
+    container.querySelectorAll("button[data-film-index]").forEach((button) => {
+      const rect = button.getBoundingClientRect();
+      const delta = Math.abs(rect.left + rect.width / 2 - center);
+      if (delta < nearestDistance) { nearestDistance = delta; nearestIndex = Number(button.dataset.filmIndex); }
+    });
+    if (nearestIndex !== session.targetIndex) { session.targetIndex = nearestIndex; setScrubIndex(nearestIndex); }
+  };
+  const finishFilmScrub = () => {
+    const session = filmScrub.current;
+    if (!session) return;
+    clearTimeout(session.timer);
+    if (session.active) {
+      blockFilmClick.current = true;
+      const nextProject = portfolioProjects[session.targetIndex];
+      if (nextProject) onSelect(nextProject);
+      setTimeout(() => { blockFilmClick.current = false; }, 120);
+    }
+    setScrubbing(false);
+    setScrubIndex(null);
+    filmScrub.current = null;
+  };
   return (
     <motion.div
       className="lightbox"
@@ -898,10 +1279,10 @@ function Lightbox({ project, onClose, onSelect }) {
           <span>
             {project.no} / {String(portfolioProjects.length).padStart(2, "0")}
           </span>
-          <strong>{project.title}</strong>
+          <strong>{copy.title}</strong>
         </div>
         <div className="lightbox-tools">
-          <button
+          {!isVideo && <><button
             onClick={(e) => {
               e.stopPropagation();
               zoom(-0.35);
@@ -910,7 +1291,7 @@ function Lightbox({ project, onClose, onSelect }) {
           >
             <ZoomOut />
           </button>
-          <span>{Math.round(view.scale * 100)}%</span>
+          <span>{isModel ? "3D" : `${Math.round(view.scale * 100)}%`}</span>
           <button
             onClick={(e) => {
               e.stopPropagation();
@@ -928,7 +1309,7 @@ function Lightbox({ project, onClose, onSelect }) {
             aria-label="复位"
           >
             <RotateCcw />
-          </button>
+          </button></>}
           <button
             className="lightbox-close"
             onClick={onClose}
@@ -946,19 +1327,21 @@ function Lightbox({ project, onClose, onSelect }) {
           }
           onClick={(e) => e.stopPropagation()}
           onWheel={(e) => {
-            e.preventDefault();
-            zoomAt(e.deltaY < 0 ? 0.25 : -0.25, e.clientX, e.clientY);
+            if (!isModel && !isVideo) {
+              e.preventDefault();
+              zoomAt(e.deltaY < 0 ? 0.25 : -0.25, e.clientX, e.clientY);
+            }
           }}
           onDoubleClick={reset}
-          onPointerDown={pointerDown}
-          onPointerMove={pointerMove}
+          onPointerDown={isModel || isVideo ? undefined : pointerDown}
+          onPointerMove={isModel || isVideo ? undefined : pointerMove}
           onPointerUp={() => (drag.current = null)}
           onPointerCancel={() => (drag.current = null)}
         >
           <AnimatePresence mode="popLayout">
             <motion.div
-              key={project.no}
-              className="lightbox-image-frame"
+              key={project.id || project.image}
+              className={`lightbox-image-frame ${isModel ? "model-frame" : ""} ${isVideo ? "video-frame" : ""}`}
               initial={{
                 opacity: 0,
                 x: slideDirection * 150,
@@ -979,61 +1362,70 @@ function Lightbox({ project, onClose, onSelect }) {
                 mass: 0.82,
               }}
             >
-              <motion.img
-                src={project.image}
-                alt={project.title}
-                loading="eager"
-                decoding="async"
-                fetchPriority="high"
-                animate={view}
-                transition={{
-                  type: "spring",
-                  stiffness: 260,
-                  damping: 30,
-                  mass: 0.65,
-                }}
-                draggable="false"
-              />
+              {isModel ? (
+                <ModelViewer ref={viewerRef} src={project.image} format={project.id?.split(".").pop()} onInfo={setModelInfo} onSnapshot={(image) => { modelPreviewCache.set(project.id, image); setModelSnapshots((current) => ({ ...current, [project.id]: image })); }} />
+              ) : isVideo ? (
+                <VideoDetail project={project} />
+              ) : (
+                <motion.img
+                  src={project.image}
+                  alt={project.title}
+                  loading="eager"
+                  decoding="async"
+                  fetchPriority="high"
+                  animate={view}
+                  transition={{ type: "spring", stiffness: 260, damping: 30, mass: 0.65 }}
+                  draggable="false"
+                />
+              )}
             </motion.div>
           </AnimatePresence>
-          <div className="lightbox-hint">
-            滚轮缩放 · 拖动平移 · 双击复位 · ESC 关闭
-          </div>
+          {!isVideo && <div className="lightbox-hint">
+            {isModel ? "拖动旋转 · 滚轮缩放 · 双击复位 · ESC 关闭" : isGif ? "GIF 自动播放 · 滚轮缩放 · 拖动平移 · ESC 关闭" : "滚轮缩放 · 拖动平移 · 双击复位 · ESC 关闭"}
+          </div>}
         </div>
         <aside
-          key={project.no}
+          key={project.id || project.image}
           className="project-detail"
           onClick={(e) => e.stopPropagation()}
         >
-          <span>{project.tag}</span>
-          <h2>{project.title}</h2>
-          <strong>{project.role}</strong>
-          <p>
-            {project.description ||
-              "围绕项目世界观与核心体验展开视觉探索，从前期参考研究、构图与色彩方案，到场景细化和最终研发落地，持续平衡叙事氛围、画面表现与生产可行性。"}
-          </p>
-          <div>
-            <i>职责</i>
-            <b>概念设计 · 风格研发 · 品质把控</b>
-          </div>
-          <div>
-            <i>流程</i>
-            <b>研究 / 草图 / 色彩 / 细化 / 交付</b>
-          </div>
+          <EditableText as="span" value={copy.tag} onCommit={(value) => commitCopy("tag", value)} className="project-editable-tag" />
+          <EditableText as="h2" value={copy.title} onCommit={(value) => commitCopy("title", value)} className="project-editable-title" />
+          <EditableText as="strong" value={copy.role} onCommit={(value) => commitCopy("role", value)} className="project-editable-role" />
+          {isModel ? <>
+            <EditableText as="p" value={copy.description} onCommit={(value) => commitCopy("description", value)} multiline className="project-editable-description" />
+            <div className="model-info-grid"><i>模型</i><b>{modelInfo ? `${modelInfo.vertices.toLocaleString()} 顶点　${modelInfo.triangles.toLocaleString()} 三角面` : "正在读取"}</b></div>
+            <div className="model-info-grid"><i>UV</i><b>{modelInfo ? `${modelInfo.uvChannels} 个 UV 通道` : "正在读取"}</b></div>
+            <div className="model-material-list"><i>材质</i><ul>{modelInfo?.materials.map((m,i)=><li key={`${m.name}-${i}`}>{m.name}　{m.type}{m.roughness!=null?`　粗糙度 ${m.roughness.toFixed(2)}`:""}{m.metalness!=null?`　金属度 ${m.metalness.toFixed(2)}`:""}</li>)}</ul></div>
+            <div className="model-material-list"><i>贴图</i><ul>{modelInfo?.textures.length ? modelInfo.textures.map((t,i)=><li key={`${t.uuid}-${i}`}>{t.type}　{t.name}{t.width?`　${t.width} × ${t.height}`:""}</li>) : <li>未检测到外部贴图</li>}</ul></div>
+          </> : isVideo ? <>
+            <EditableText as="p" value={copy.description} onCommit={(value) => commitCopy("description", value)} multiline className="project-editable-description" />
+            <div><i>格式</i><b>MP4 动态影像</b></div>
+            <div><i>操作</i><EditableText as="b" value={copy.process} onCommit={(value) => commitCopy("process", value)} className="project-editable-meta" /></div>
+          </> : <>
+            <EditableText as="p" value={copy.description} onCommit={(value) => commitCopy("description", value)} multiline className="project-editable-description" />
+            <div><i>职责</i><EditableText as="b" value={copy.duty} onCommit={(value) => commitCopy("duty", value)} className="project-editable-meta" /></div>
+            <div><i>流程</i><EditableText as="b" value={copy.process} onCommit={(value) => commitCopy("process", value)} className="project-editable-meta" /></div>
+          </>}
         </aside>
       </div>
       <motion.div
         ref={filmRef}
-        className="filmstrip"
+        className={`filmstrip ${scrubbing ? "is-scrubbing" : ""}`}
         onClick={(e) => e.stopPropagation()}
+        onPointerDown={beginFilmScrub}
+        onPointerMove={moveFilmScrub}
+        onPointerUp={finishFilmScrub}
+        onPointerCancel={finishFilmScrub}
         initial="hidden"
         animate="show"
       >
         {portfolioProjects.map((p, i) => (
           <motion.button
             key={p.id || p.no}
+            data-film-index={i}
             className={
-              p.id === project.id || p.image === project.image ? "active" : ""
+              `${p.id === project.id || p.image === project.image ? "active" : ""} ${scrubIndex === i ? "scrub-target" : ""}`
             }
             variants={{
               hidden: { opacity: 0, y: 65, scale: 0.7 },
@@ -1045,9 +1437,12 @@ function Lightbox({ project, onClose, onSelect }) {
               stiffness: 190,
               damping: 20,
             }}
-            onClick={() => onSelect(p)}
+            onClick={(event) => {
+              if (blockFilmClick.current) { event.preventDefault(); return; }
+              onSelect(p);
+            }}
           >
-            <img src={p.image} alt={p.title} loading="lazy" decoding="async" />
+            {p.type === "model" ? (modelSnapshots[p.id] ? <img className="model-static-thumb" src={modelSnapshots[p.id]} alt={`${p.title} 静态预览`} /> : <span className="model-thumb">3D</span>) : p.type === "video" ? <video src={p.image} muted playsInline preload="metadata" aria-label={`${p.title} 视频缩略图`} /> : p.type === "gif" ? <GifPreview src={p.image} alt={p.title} interactive={false} className="film-gif" /> : <img src={p.image} alt={p.title} loading="lazy" decoding="async" />}
             <span>{String(i + 1).padStart(2, "0")}</span>
           </motion.button>
         ))}
@@ -1061,43 +1456,75 @@ function ProjectTile({
   index,
   onOpen,
   dragging,
-  onDragStart,
-  onDragOver,
-  onDragEnd,
+  onPointerDragStart,
+  dropIntent,
 }) {
+  const [mediaHovered, setMediaHovered] = useState(false);
   const tile = useRef(null),
-    image = useRef(null);
+    image = useRef(null),
+    video = useRef(null),
+    moveFrame = useRef(0),
+    pendingPoint = useRef(null);
   const move = (e) => {
-    const r = tile.current.getBoundingClientRect(),
-      x = (e.clientX - r.left - r.width / 2) / r.width,
-      y = (e.clientY - r.top - r.height / 2) / r.height;
-    tile.current.style.transform = `translate3d(${x * 18}px,${y * 18}px,0) scale(1.018)`;
-    image.current.style.transform = `scale(1.08) translate3d(${-x * 12}px,${-y * 12}px,0)`;
+    if (dragging) return;
+    pendingPoint.current = { x: e.clientX, y: e.clientY };
+    if (moveFrame.current) return;
+    moveFrame.current = requestAnimationFrame(() => {
+      moveFrame.current = 0;
+      if (!tile.current || !pendingPoint.current) return;
+      const r = tile.current.getBoundingClientRect(),
+        x = (pendingPoint.current.x - r.left - r.width / 2) / r.width,
+        y = (pendingPoint.current.y - r.top - r.height / 2) / r.height;
+      tile.current.style.transform = `translate3d(${x * 14}px,${y * 14}px,0) scale(1.012)`;
+      if (image.current) image.current.style.transform = `scale(1.045) translate3d(${-x * 8}px,${-y * 8}px,0)`;
+    });
   };
   const resetTile = () => {
+    if (moveFrame.current) cancelAnimationFrame(moveFrame.current);
+    moveFrame.current = 0;
+    pendingPoint.current = null;
+    setMediaHovered(false);
     tile.current.style.transform = "translate3d(0,0,0) scale(1)";
-    image.current.style.transform = "scale(1.03) translate3d(0,0,0)";
+    if (image.current) image.current.style.transform = "scale(1.03) translate3d(0,0,0)";
+    if (video.current) {
+      video.current.pause();
+      video.current.currentTime = 0;
+    }
   };
   return (
     <motion.div
-      layout
-      className={`project-tile-shell ${project.layout} ${dragging ? "is-dragging" : ""}`}
+      className={`project-tile-shell ${project.layout} ${dragging ? "is-dragging" : ""} ${dropIntent ? `drop-${dropIntent}` : ""}`}
+      style={{ viewTransitionName: `work-item-${portfolioProjects.findIndex((item) => item.id === project.id)}` }}
       initial={{ opacity: 0 }}
+      exit={{ opacity: 0, scale: 0.86, filter: "blur(5px)" }}
       whileInView={{ opacity: 1 }}
       viewport={{ once: true, amount: 0.18 }}
       transition={{
-        layout: { type: "spring", stiffness: 260, damping: 28 },
         opacity: { duration: 0.7, delay: (index % 3) * 0.08 },
       }}
     >
+      {dropIntent && (
+        <div className={`drop-slot drop-slot-${dropIntent}`} aria-hidden="true">
+          <span>{dropIntent === "before" ? "↑" : "↓"}</span>
+          <b>插入此处</b>
+          <i />
+        </div>
+      )}
       <article
         ref={tile}
         className="project-tile"
-        draggable
-        onDragStart={(e) => onDragStart(e, project.id)}
-        onDragOver={(e) => onDragOver(e, project.id)}
-        onDragEnd={onDragEnd}
+        draggable="false"
+        data-project-id={project.id}
+        onPointerDown={(e) => {
+          if (e.button !== 0) return;
+          resetTile();
+          onPointerDragStart(e, project.id, project.title);
+        }}
         onMouseMove={move}
+        onMouseEnter={() => {
+          setMediaHovered(true);
+          if (video.current) video.current.play().catch(() => {});
+        }}
         onMouseLeave={resetTile}
         onClick={() => {
           if (!dragging) onOpen(project);
@@ -1107,14 +1534,7 @@ function ProjectTile({
           if (e.key === "Enter") onOpen(project);
         }}
       >
-        <img
-          ref={image}
-          src={project.image}
-          alt={project.title}
-          loading="lazy"
-          decoding="async"
-          draggable="false"
-        />
+        {project.type === "model" ? <ModelViewer src={project.image} format={project.id?.split(".").pop()} preview /> : project.type === "video" ? <div ref={image} className="tile-media-transform"><video ref={video} src={project.image} muted playsInline loop preload="metadata" aria-label={`${project.title} 视频预览`} /><span className="media-kind">MP4</span></div> : project.type === "gif" ? <div ref={image} className="tile-media-transform"><GifPreview src={project.image} alt={project.title} active={mediaHovered} /></div> : <img ref={image} src={project.image} alt={project.title} loading="lazy" decoding="async" draggable="false" />}
         <div className="project-overlay" />
         <div className="project-tile-top">
           <span>{project.no}</span>
@@ -1134,14 +1554,22 @@ function ProjectTile({
 
 function Work({ onOpen }) {
   const dragId = useRef(null),
+    filterRef = useRef(null),
+    refreshDropTarget = useRef(null),
     [dragging, setDragging] = useState(null);
+  const [dropIntent, setDropIntent] = useState(null);
+  const [filterOpen, setFilterOpen] = useState(false);
+  const [activeFilter, setActiveFilter] = useState(null);
+  const [copyOverrides, setCopyOverrides] = useState({});
   const [ordered, setOrdered] = useState(() => {
     try {
       const saved = JSON.parse(localStorage.getItem("yang-work-order") || "[]"),
         map = new Map(portfolioProjects.map((p) => [p.id, p])),
         known = saved.map((id) => map.get(id)).filter(Boolean),
-        fresh = portfolioProjects.filter((p) => !saved.includes(p.id));
-      return [...fresh, ...known];
+        fresh = portfolioProjects.filter((p) => !saved.includes(p.id)),
+        freshWorks = fresh.filter((p) => !p.id.startsWith("placeholder-")),
+        freshPlaceholders = fresh.filter((p) => p.id.startsWith("placeholder-"));
+      return [...freshWorks, ...known, ...freshPlaceholders];
     } catch {
       return portfolioProjects;
     }
@@ -1152,28 +1580,138 @@ function Work({ onOpen }) {
       JSON.stringify(ordered.map((p) => p.id)),
     );
   }, [ordered]);
-  const start = (e, id) => {
-    dragId.current = id;
-    setDragging(id);
-    e.dataTransfer.effectAllowed = "move";
-    e.dataTransfer.setData("text/plain", id);
-  };
-  const over = (e, target) => {
-    e.preventDefault();
-    if (!dragId.current || dragId.current === target) return;
-    setOrdered((list) => {
-      const from = list.findIndex((p) => p.id === dragId.current),
-        to = list.findIndex((p) => p.id === target);
-      if (from < 0 || to < 0) return list;
-      const next = [...list],
-        [moved] = next.splice(from, 1);
-      next.splice(to, 0, moved);
+  useEffect(() => {
+    const close = (event) => {
+      if (!filterRef.current?.contains(event.target)) setFilterOpen(false);
+    };
+    const key = (event) => {
+      if (event.key === "Escape") setFilterOpen(false);
+    };
+    addEventListener("pointerdown", close);
+    addEventListener("keydown", key);
+    return () => {
+      removeEventListener("pointerdown", close);
+      removeEventListener("keydown", key);
+    };
+  }, []);
+  useEffect(() => {
+    const syncProjectCopy = (event) => {
+      const { key, value } = event.detail || {};
+      if (key && value) setCopyOverrides((current) => ({ ...current, [key]: value }));
+    };
+    window.addEventListener("project-copy-updated", syncProjectCopy);
+    return () => window.removeEventListener("project-copy-updated", syncProjectCopy);
+  }, []);
+  useEffect(() => {
+    if (!dragging) return;
+    let wheelFrame = 0;
+    let pendingDelta = 0;
+    const wheelWhileDragging = (event) => {
+      event.preventDefault();
+      pendingDelta += event.deltaY;
+      if (wheelFrame) return;
+      wheelFrame = requestAnimationFrame(() => {
+        const distance = Math.max(-420, Math.min(420, pendingDelta));
+        pendingDelta = 0;
+        wheelFrame = 0;
+        window.scrollBy({ top: distance, left: 0, behavior: "auto" });
+        requestAnimationFrame(() => refreshDropTarget.current?.());
+      });
+    };
+    window.addEventListener("wheel", wheelWhileDragging, { passive: false, capture: true });
+    return () => {
+      window.removeEventListener("wheel", wheelWhileDragging, true);
+      if (wheelFrame) cancelAnimationFrame(wheelFrame);
+    };
+  }, [dragging]);
+  const filters = [
+    { id: "image", label: "原画", index: "01" },
+    { id: "gif", label: "动效", index: "02" },
+    { id: "video", label: "视频", index: "03" },
+  ];
+  const displayOrdered = ordered.map((project) => ({
+    ...project,
+    ...(savedProjectCopy[project.id] || {}),
+    ...(copyOverrides[project.id] || {}),
+  }));
+  const visibleProjects = activeFilter ? displayOrdered.filter((project) => project.type === activeFilter) : displayOrdered;
+  const commitDrop = (movingId, target, side) => {
+    if (!movingId || !target || movingId === target) return;
+    const updateOrder = () => flushSync(() => setOrdered((list) => {
+      const from = list.findIndex((p) => p.id === movingId),
+        next = [...list];
+      if (from < 0) return list;
+      const [moved] = next.splice(from, 1);
+      const targetIndex = next.findIndex((p) => p.id === target);
+      if (targetIndex < 0) return list;
+      next.splice(targetIndex + (side === "after" ? 1 : 0), 0, moved);
       return next;
-    });
+    }));
+    if (document.startViewTransition) document.startViewTransition(updateOrder);
+    else updateOrder();
   };
-  const end = () => {
-    dragId.current = null;
-    setTimeout(() => setDragging(null), 80);
+  const startPointerDrag = (event, id, title) => {
+    const origin = { x: event.clientX, y: event.clientY };
+    let active = false;
+    let ghost = null;
+    let lastPoint = origin;
+    let localIntent = null;
+    const updateTarget = () => {
+      if (!active) return;
+      const targetElement = document.elementFromPoint(lastPoint.x, lastPoint.y)?.closest?.("[data-project-id]");
+      const target = targetElement?.dataset.projectId;
+      if (!target || target === id) {
+        localIntent = null;
+        setDropIntent(null);
+        return;
+      }
+      const rect = targetElement.getBoundingClientRect();
+      const side = lastPoint.y < rect.top + rect.height / 2 ? "before" : "after";
+      if (localIntent?.id === target && localIntent?.side === side) return;
+      localIntent = { id: target, side };
+      setDropIntent(localIntent);
+    };
+    const activate = () => {
+      active = true;
+      dragId.current = id;
+      setDragging(id);
+      setDropIntent(null);
+      document.body.classList.add("work-pointer-dragging");
+      ghost = document.createElement("div");
+      ghost.className = "work-drag-ghost is-visible";
+      const label = document.createElement("small");
+      const name = document.createElement("strong");
+      label.textContent = "MOVE / WORK";
+      name.textContent = title;
+      ghost.append(label, name);
+      document.body.appendChild(ghost);
+    };
+    const movePointer = (moveEvent) => {
+      lastPoint = { x: moveEvent.clientX, y: moveEvent.clientY };
+      if (!active && Math.hypot(lastPoint.x - origin.x, lastPoint.y - origin.y) >= 7) activate();
+      if (!active) return;
+      moveEvent.preventDefault();
+      if (ghost) ghost.style.transform = `translate3d(${lastPoint.x + 16}px,${lastPoint.y + 14}px,0)`;
+      updateTarget();
+    };
+    const finishPointer = () => {
+      document.removeEventListener("pointermove", movePointer);
+      document.removeEventListener("pointerup", finishPointer);
+      document.removeEventListener("pointercancel", finishPointer);
+      refreshDropTarget.current = null;
+      ghost?.remove();
+      document.body.classList.remove("work-pointer-dragging");
+      if (active && localIntent) commitDrop(id, localIntent.id, localIntent.side);
+      setDropIntent(null);
+      if (active) setTimeout(() => {
+        dragId.current = null;
+        setDragging(null);
+      }, 90);
+    };
+    refreshDropTarget.current = updateTarget;
+    document.addEventListener("pointermove", movePointer, { passive: false });
+    document.addEventListener("pointerup", finishPointer, { once: true });
+    document.addEventListener("pointercancel", finishPointer, { once: true });
   };
   return (
     <section className="section work work-gallery" id="work">
@@ -1183,21 +1721,67 @@ function Work({ onOpen }) {
       </div>
       <div className="work-intro">
           <PressureHeading lines={["先理解需求", "再完成画面"]} />
-          <p>移动鼠标探索作品　单击进入沉浸大图</p>
       </div>
-      <div className="project-mosaic">
-        {ordered.map((p, i) => (
+      <div className="work-gallery-toolbar">
+        <div className="collision-hint" aria-label="移动鼠标探索作品　单击进入沉浸大图">
+          <span>移动鼠标</span><span>探索作品</span><i /><span>单击进入</span><span>沉浸大图</span>
+        </div>
+        <div className="work-filter" ref={filterRef}>
+          <button
+            className={`work-filter-trigger ${filterOpen ? "is-open" : ""} ${activeFilter ? "has-filter" : ""}`}
+            onClick={() => setFilterOpen((value) => !value)}
+            aria-expanded={filterOpen}
+            aria-haspopup="menu"
+          >
+            <SlidersHorizontal />
+            <span>{filters.find((item) => item.id === activeFilter)?.label || "筛选作品"}</span>
+            <ChevronDown />
+          </button>
+          <AnimatePresence>
+            {filterOpen && (
+              <motion.div
+                className="work-filter-menu"
+                role="menu"
+                initial={{ opacity: 0, y: -12, scaleY: 0.75 }}
+                animate={{ opacity: 1, y: 0, scaleY: 1 }}
+                exit={{ opacity: 0, y: -8, scaleY: 0.8 }}
+                transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
+              >
+                {filters.map((item, index) => (
+                  <motion.button
+                    key={item.id}
+                    role="menuitem"
+                    className={activeFilter === item.id ? "active" : ""}
+                    initial={{ opacity: 0, x: 12 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.06 + index * 0.055 }}
+                    onClick={() => {
+                      setActiveFilter((current) => current === item.id ? null : item.id);
+                      setFilterOpen(false);
+                    }}
+                  >
+                    <small>{item.index}</small><span>{item.label}</span><i />
+                  </motion.button>
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </div>
+      <div className={`project-mosaic ${dragging ? "is-reordering" : ""}`}>
+        <AnimatePresence mode="popLayout">
+        {visibleProjects.map((p, i) => (
           <ProjectTile
             key={p.id}
             project={{ ...p, no: String(i + 1).padStart(2, "0") }}
             index={i}
             onOpen={onOpen}
             dragging={dragging === p.id}
-            onDragStart={start}
-            onDragOver={over}
-            onDragEnd={end}
+            onPointerDragStart={startPointerDrag}
+            dropIntent={dropIntent?.id === p.id ? dropIntent.side : null}
           />
         ))}
+        </AnimatePresence>
       </div>
     </section>
   );
@@ -1333,8 +1917,8 @@ function Experience({ onOpen }) {
                     <li key={line}>{line}</li>
                   ))}
                 </ul>
+                <span className="timeline-view-label">查看对应项目</span>
               </div>
-              <span className="timeline-view-label">查看对应项目</span>
             </motion.article>
           ))}
         </div>
