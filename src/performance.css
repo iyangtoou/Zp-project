@@ -1,0 +1,2 @@
+@supports(content-visibility:auto){.work-gallery,.about,.experience,.ability,footer{content-visibility:auto;contain-intrinsic-size:auto 900px}}
+img{content-visibility:auto}.project-tile img,.selected-project-cards img,.filmstrip img{background:#11110f}

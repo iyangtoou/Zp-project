@@ -48,6 +48,7 @@ import "./detail-fit.css";
 import "./filmstrip-polish.css";
 import "./detail-controls.css";
 import "./hero-signature.css";
+import "./performance.css";
 
 const projects = [
   {
@@ -319,8 +320,11 @@ function Header() {
   const [scrolled, setScrolled] = useState(false),
     [open, setOpen] = useState(false);
   useEffect(() => {
-    const fn = () => setScrolled(scrollY > 80);
-    addEventListener("scroll", fn);
+    let scheduled = false;
+    const update = () => { scheduled = false; setScrolled(scrollY > 80); };
+    const fn = () => { if (!scheduled) { scheduled = true; requestAnimationFrame(update); } };
+    update();
+    addEventListener("scroll", fn, { passive: true });
     return () => removeEventListener("scroll", fn);
   }, []);
   return (
@@ -358,14 +362,16 @@ function GenerativeBackdrop() {
   useEffect(() => {
     const canvas = canvasRef.current,
       ctx = canvas.getContext("2d", { alpha: false });
-    let frame,
+    let frame = 0,
       w,
       h,
       dpr,
-      t = 0;
+      t = 0,
+      active = true,
+      lastFrame = 0;
     const mouse = { x: 0.5, y: 0.5, tx: 0.5, ty: 0.5 };
     const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const particles = Array.from({ length: 90 }, (_, i) => ({
+    const particles = Array.from({ length: innerWidth < 800 ? 48 : 72 }, (_, i) => ({
       x: Math.random(),
       y: Math.random(),
       r: Math.random() * 1.7 + 0.25,
@@ -375,7 +381,7 @@ function GenerativeBackdrop() {
       kind: i % 7 === 0,
     }));
     const resize = () => {
-      dpr = Math.min(devicePixelRatio || 1, 1.6);
+      dpr = Math.min(devicePixelRatio || 1, innerWidth < 800 ? 1.15 : 1.4);
       w = canvas.clientWidth;
       h = canvas.clientHeight;
       canvas.width = w * dpr;
@@ -408,7 +414,11 @@ function GenerativeBackdrop() {
       ctx.lineCap = "round";
       ctx.stroke();
     };
-    const draw = () => {
+    const draw = (now = 0) => {
+      if (!active) return;
+      const interval = innerWidth < 800 ? 1000 / 30 : 1000 / 45;
+      if (now - lastFrame < interval) { frame = requestAnimationFrame(draw); return; }
+      lastFrame = now;
       t += reduced ? 0 : 0.012;
       mouse.x += (mouse.tx - mouse.x) * 0.025;
       mouse.y += (mouse.ty - mouse.y) * 0.025;
@@ -485,14 +495,25 @@ function GenerativeBackdrop() {
       ctx.fillRect(0, 0, w, h);
       frame = requestAnimationFrame(draw);
     };
+    const setActive = (next) => {
+      active = next && !document.hidden;
+      if (active && !frame) frame = requestAnimationFrame(draw);
+      if (!active && frame) { cancelAnimationFrame(frame); frame = 0; }
+    };
+    const observer = new IntersectionObserver(([entry]) => setActive(entry.isIntersecting), { rootMargin: "100px" });
+    const visibility = () => setActive(!document.hidden && canvas.getBoundingClientRect().bottom > -100);
     resize();
-    addEventListener("resize", resize);
-    addEventListener("pointermove", pointer);
-    draw();
+    observer.observe(canvas);
+    addEventListener("resize", resize, { passive: true });
+    canvas.addEventListener("pointermove", pointer, { passive: true });
+    document.addEventListener("visibilitychange", visibility);
+    frame = requestAnimationFrame(draw);
     return () => {
       cancelAnimationFrame(frame);
+      observer.disconnect();
       removeEventListener("resize", resize);
-      removeEventListener("pointermove", pointer);
+      canvas.removeEventListener("pointermove", pointer);
+      document.removeEventListener("visibilitychange", visibility);
     };
   }, []);
   return (
@@ -961,6 +982,9 @@ function Lightbox({ project, onClose, onSelect }) {
               <motion.img
                 src={project.image}
                 alt={project.title}
+                loading="eager"
+                decoding="async"
+                fetchPriority="high"
                 animate={view}
                 transition={{
                   type: "spring",
@@ -1023,7 +1047,7 @@ function Lightbox({ project, onClose, onSelect }) {
             }}
             onClick={() => onSelect(p)}
           >
-            <img src={p.image} alt={p.title} />
+            <img src={p.image} alt={p.title} loading="lazy" decoding="async" />
             <span>{String(i + 1).padStart(2, "0")}</span>
           </motion.button>
         ))}
@@ -1087,6 +1111,8 @@ function ProjectTile({
           ref={image}
           src={project.image}
           alt={project.title}
+          loading="lazy"
+          decoding="async"
           draggable="false"
         />
         <div className="project-overlay" />
@@ -1179,12 +1205,11 @@ function Work({ onOpen }) {
 
 function ProjectTypeTags() {
   const [bursts, setBursts] = useState([]),
-    counts = useRef({}),
     id = useRef(0);
   const add = (type) => {
-    const offset = counts.current[type] || 0;
-    counts.current[type] = offset + 1;
-    setBursts((v) => [...v, { id: ++id.current, type, offset }]);
+    const x = 16 + Math.random() * 68;
+    const y = 18 + Math.random() * 58;
+    setBursts((v) => [...v, { id: ++id.current, type, x, y }]);
   };
   return (
     <div className="type-tags">
@@ -1200,7 +1225,7 @@ function ProjectTypeTags() {
             .map((b) => (
               <span
                 key={b.id}
-                style={{ "--offset": `${b.offset}px` }}
+                style={{ "--burst-x": `${b.x}%`, "--burst-y": `${b.y}%` }}
                 onAnimationEnd={() =>
                   setBursts((v) => v.filter((item) => item.id !== b.id))
                 }
@@ -1325,7 +1350,7 @@ function Experience({ onOpen }) {
                     style={{ "--delay": `${-i * 0.8}s` }}
                     onClick={() => onOpen(p)}
                   >
-                    <img src={p.image} alt="" />
+                    <img src={p.image} alt="" loading="lazy" decoding="async" />
                     <i>{String(i + 1).padStart(2, "0")}</i>
                     <strong>《{game.name}》</strong>
                     <ArrowUpRight />
