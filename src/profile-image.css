@@ -1,0 +1,105 @@
+.portrait-art-image {
+  background: #14120f;
+  isolation: isolate;
+}
+
+.portrait-art-image::before {
+  content: none !important;
+}
+
+.portrait-art-image::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 72% 19%, rgba(207, 160, 101, 0.14), transparent 25%),
+    linear-gradient(112deg, rgba(8, 8, 7, 0.18) 16%, transparent 48%, rgba(201, 150, 91, 0.08) 66%, rgba(5, 5, 5, 0.2) 88%);
+  mix-blend-mode: soft-light;
+  animation: portraitAtmosphere 14s ease-in-out infinite !important;
+}
+
+.portrait-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+  pointer-events: none;
+  user-select: none;
+}
+
+.portrait-image-base {
+  z-index: 1;
+  will-change: filter, transform;
+  animation: portraitSlowFocus 13s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+.portrait-image-ghost {
+  z-index: 2;
+  opacity: 0.06;
+  filter: blur(8px) brightness(1.16);
+  mix-blend-mode: screen;
+  clip-path: polygon(18% 0, 100% 0, 100% 72%, 67% 72%, 67% 100%, 10% 100%);
+  will-change: opacity, filter, transform;
+  animation: portraitGhost 16s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+.portrait-atmosphere {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.18), transparent 38%, rgba(213, 165, 105, 0.045) 72%, rgba(0, 0, 0, 0.12));
+  box-shadow: inset 0 0 80px rgba(0, 0, 0, 0.34);
+  animation: portraitShade 12s ease-in-out infinite;
+}
+
+@keyframes portraitSlowFocus {
+  0%, 100% {
+    transform: scale(1.012);
+    filter: brightness(0.82) contrast(1.05) saturate(0.9) blur(0.25px);
+  }
+  48% {
+    transform: scale(1.026);
+    filter: brightness(0.96) contrast(1.1) saturate(1) blur(0);
+  }
+  72% {
+    transform: scale(1.019);
+    filter: brightness(0.88) contrast(1.07) saturate(0.94) blur(0.45px);
+  }
+}
+
+@keyframes portraitGhost {
+  0%, 100% {
+    opacity: 0.035;
+    transform: translate3d(-2px, 1px, 0) scale(1.018);
+    filter: blur(9px) brightness(1.1);
+  }
+  50% {
+    opacity: 0.13;
+    transform: translate3d(3px, -2px, 0) scale(1.032);
+    filter: blur(3px) brightness(1.23);
+  }
+}
+
+@keyframes portraitAtmosphere {
+  0%, 100% { opacity: 0.42; transform: translate3d(-1.5%, 0, 0); }
+  50% { opacity: 0.8; transform: translate3d(1.5%, 0, 0); }
+}
+
+@keyframes portraitShade {
+  0%, 100% { opacity: 0.88; }
+  50% { opacity: 0.48; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .portrait-image,
+  .portrait-art-image::after,
+  .portrait-atmosphere {
+    animation: none !important;
+  }
+}

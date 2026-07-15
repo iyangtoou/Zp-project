@@ -1,0 +1,123 @@
+.project-detail {
+  position: relative;
+  padding: 46px 30px 34px !important;
+  background:
+    linear-gradient(135deg, rgba(192, 150, 77, 0.025), transparent 44%),
+    #0d0d0b !important;
+}
+
+.project-detail::before {
+  content: "PROJECT NOTES";
+  display: block;
+  margin-bottom: 24px;
+  color: rgba(205, 165, 91, 0.42);
+  font: 8px/1 sans-serif;
+  letter-spacing: 0.28em;
+}
+
+.project-editable {
+  position: relative;
+  min-width: 1em;
+  outline: none;
+  cursor: text;
+  border-radius: 2px;
+  transition: color 0.28s ease, background 0.28s ease, box-shadow 0.28s ease;
+}
+
+.project-editable:hover,
+.project-editable:focus {
+  background: rgba(215, 178, 106, 0.055);
+  box-shadow: inset 2px 0 0 rgba(215, 178, 106, 0.66);
+}
+
+.project-editable:focus {
+  color: #ece7da !important;
+}
+
+.project-editable-tag {
+  display: block;
+  width: max-content;
+  max-width: 100%;
+  padding: 5px 8px 5px 0;
+  color: #cfa85d !important;
+  font-size: 8px !important;
+  line-height: 1.4;
+  letter-spacing: 0.24em !important;
+}
+
+.project-editable-title {
+  margin: 18px 0 10px !important;
+  padding: 2px 7px 4px 0;
+  color: #e1ddd2 !important;
+  font-size: clamp(25px, 2.15vw, 34px) !important;
+  line-height: 1.3 !important;
+}
+
+.project-editable-role {
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+  padding: 4px 8px 4px 0;
+  color: #d5ae62 !important;
+  font-size: 10px !important;
+  line-height: 1.65;
+  letter-spacing: 0.12em !important;
+}
+
+.project-editable-description {
+  margin: 34px 0 30px !important;
+  padding: 13px 13px 13px 17px;
+  border-left: 1px solid rgba(205, 165, 91, 0.48);
+  background: linear-gradient(90deg, rgba(205, 165, 91, 0.045), transparent 85%);
+  color: #aaa69b !important;
+  font-size: 12px !important;
+  line-height: 2.05 !important;
+  white-space: pre-wrap;
+}
+
+.project-detail > div:not(.model-material-list):not(.model-info-grid) {
+  position: relative;
+  grid-template-columns: 48px minmax(0, 1fr) !important;
+  align-items: start;
+  gap: 16px !important;
+  padding: 18px 4px !important;
+  border-top-color: rgba(222, 214, 194, 0.12) !important;
+}
+
+.project-detail > div::after {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: 0;
+  width: 22px;
+  height: 1px;
+  background: #cba45a;
+}
+
+.project-detail i {
+  padding-top: 4px;
+  color: #77736a !important;
+}
+
+.project-editable-meta {
+  display: block;
+  padding: 3px 7px;
+  color: #d2ad66 !important;
+  font-size: 10px;
+  line-height: 1.8;
+}
+
+.project-editable:empty::before {
+  content: "点击输入内容";
+  color: rgba(151, 147, 137, 0.55);
+}
+
+body:not(.local-editor) .project-editable:hover,
+body:not(.local-editor) .project-editable:focus {
+  background: transparent;
+  box-shadow: none;
+}
+
+@media (max-width: 1050px) {
+  .project-detail { padding: 34px 24px 28px !important; }
+}

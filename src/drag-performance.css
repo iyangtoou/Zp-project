@@ -1,0 +1,126 @@
+.work-drag-ghost {
+  position: fixed;
+  z-index: 9999;
+  top: -200px;
+  left: -200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 190px;
+  min-height: 62px;
+  padding: 12px 16px;
+  border: 1px solid rgba(209, 170, 96, 0.62);
+  border-radius: 3px;
+  background: rgba(11, 13, 13, 0.94);
+  color: #d8d3c7;
+  box-shadow: 0 16px 42px rgba(0, 0, 0, 0.55);
+  pointer-events: none;
+}
+
+.work-drag-ghost small {
+  margin-bottom: 7px;
+  color: #b59055;
+  font-size: 7px;
+  letter-spacing: 0.2em;
+}
+
+.work-drag-ghost strong {
+  overflow: hidden;
+  font: 400 12px/1.4 'Noto Serif SC';
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.work-drag-ghost.is-visible {
+  top: 0;
+  left: 0;
+  will-change: transform;
+}
+
+body.work-pointer-dragging,
+body.work-pointer-dragging * {
+  user-select: none !important;
+  cursor: grabbing !important;
+}
+
+.project-mosaic.is-reordering .project-tile-shell {
+  animation-play-state: paused !important;
+}
+
+.project-mosaic.is-reordering .project-tile {
+  transition: opacity 0.2s ease, filter 0.2s ease !important;
+}
+
+.project-mosaic.is-reordering .project-tile-shell:not(.is-dragging) .project-tile {
+  opacity: 0.72;
+  filter: saturate(0.72);
+}
+
+.project-tile-shell.drop-before,
+.project-tile-shell.drop-after {
+  position: relative;
+}
+
+.project-tile-shell.drop-before::before,
+.project-tile-shell.drop-after::after {
+  content: "";
+  position: absolute;
+  z-index: 12;
+  left: 5%;
+  right: 5%;
+  height: 2px;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, #d0a45a 12%, #e0c184 50%, #d0a45a 88%, transparent);
+  box-shadow: 0 0 12px rgba(207, 164, 90, 0.48);
+}
+
+.drop-slot {
+  position: absolute;
+  z-index: 20;
+  left: 5%;
+  right: 5%;
+  display: grid;
+  grid-template-columns: 20px auto 1fr;
+  align-items: center;
+  gap: 9px;
+  height: 30px;
+  padding: 0 10px;
+  overflow: hidden;
+  border: 1px solid rgba(215, 177, 105, 0.55);
+  border-radius: 3px;
+  background: rgba(22, 20, 16, 0.92);
+  color: #d5b370;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.46), inset 0 0 18px rgba(204, 158, 80, 0.045);
+  pointer-events: none;
+  animation: dropSlotIn 0.22s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.drop-slot-before { top: -35px; }
+.drop-slot-after { bottom: -33px; }
+.drop-slot span { font-size: 12px; }
+.drop-slot b { font-size: 9px; font-weight: 400; letter-spacing: 0.18em; white-space: nowrap; }
+.drop-slot i { height: 1px; background: linear-gradient(90deg, rgba(213, 179, 112, 0.75), transparent); }
+
+.project-tile-shell.drop-before::before { top: -10px; }
+.project-tile-shell.drop-after::after { bottom: -8px; }
+
+.project-tile-shell.drop-before .project-tile,
+.project-tile-shell.drop-after .project-tile {
+  opacity: 1 !important;
+  filter: none !important;
+  box-shadow: 0 0 0 1px rgba(207, 164, 90, 0.36), 0 20px 50px rgba(0, 0, 0, 0.36);
+}
+
+::view-transition-group(*) {
+  animation-duration: 0.48s;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes dropSlotIn {
+  from { opacity: 0; transform: scaleX(0.72); }
+  to { opacity: 1; transform: scaleX(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*) { animation-duration: 0.01s; }
+}
