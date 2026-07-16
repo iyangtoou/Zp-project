@@ -1,0 +1,36 @@
+/* Animated media already refreshes continuously. Avoid putting the entire
+   lightbox on another backdrop-filter compositing layer, which can make the
+   Windows Chromium hardware cursor flicker. */
+.lightbox {
+  background: rgba(5, 5, 4, 0.985) !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  cursor: default;
+}
+
+/* Keep one cursor while travelling across the layered detail interface.
+   Buttons remain clickable and editable fields still accept focus; only an
+   active drag or focused text field gets a different cursor. */
+.lightbox,
+.lightbox *,
+.lightbox-stage,
+.lightbox-stage.zoomed,
+.lightbox-tools button,
+.filmstrip,
+.filmstrip button,
+.project-detail,
+.project-editable {
+  cursor: default !important;
+}
+
+.lightbox-image-frame {
+  will-change: auto !important;
+}
+
+.lightbox-stage.zoomed:active {
+  cursor: grabbing !important;
+}
+
+.project-editable:focus {
+  cursor: text !important;
+}

@@ -9,8 +9,9 @@ const TextPressure=({text='',className='',minFontSize=34,textColor='#d8d4c8'})=>
   useEffect(()=>{
     const node=box.current,reduced=matchMedia('(prefers-reduced-motion: reduce)').matches
     if(!node||reduced)return
-    let raf=0,active=false
+    let raf=0,active=false,listening=false
     const move=e=>{cursor.current={x:e.clientX,y:e.clientY}}
+    const listen=next=>{if(next===listening)return;listening=next;(next?addEventListener:removeEventListener)('pointermove',move,{passive:true})}
     const tick=()=>{
       if(!active){raf=0;return}
       smooth.current.x+=(cursor.current.x-smooth.current.x)*.12
@@ -24,10 +25,10 @@ const TextPressure=({text='',className='',minFontSize=34,textColor='#d8d4c8'})=>
       })
       raf=requestAnimationFrame(tick)
     }
-    const observer=new IntersectionObserver(([entry])=>{active=entry.isIntersecting&&!document.hidden;if(active&&!raf)raf=requestAnimationFrame(tick);if(!active&&raf){cancelAnimationFrame(raf);raf=0}},{rootMargin:'100px'})
-    const visibility=()=>{active=!document.hidden&&node.getBoundingClientRect().top<innerHeight+100&&node.getBoundingClientRect().bottom>-100;if(active&&!raf)raf=requestAnimationFrame(tick)}
-    observer.observe(node);addEventListener('pointermove',move,{passive:true});document.addEventListener('visibilitychange',visibility)
-    return()=>{observer.disconnect();removeEventListener('pointermove',move);document.removeEventListener('visibilitychange',visibility);cancelAnimationFrame(raf)}
+    const observer=new IntersectionObserver(([entry])=>{active=entry.isIntersecting&&!document.hidden;listen(active);if(active&&!raf)raf=requestAnimationFrame(tick);if(!active&&raf){cancelAnimationFrame(raf);raf=0}},{rootMargin:'100px'})
+    const visibility=()=>{active=!document.hidden&&node.getBoundingClientRect().top<innerHeight+100&&node.getBoundingClientRect().bottom>-100;listen(active);if(active&&!raf)raf=requestAnimationFrame(tick);if(!active&&raf){cancelAnimationFrame(raf);raf=0}}
+    observer.observe(node);document.addEventListener('visibilitychange',visibility)
+    return()=>{observer.disconnect();listen(false);document.removeEventListener('visibilitychange',visibility);cancelAnimationFrame(raf)}
   },[])
   return <div ref={box} className={`text-pressure ${className}`}><div style={{fontSize:size,color:textColor}}>{[...text].map((c,i)=><span key={i} ref={el=>letters.current[i]=el}>{c===' '? '\u00a0':c}</span>)}</div></div>
 }

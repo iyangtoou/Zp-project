@@ -1,0 +1,12 @@
+.career-detail-panel{border:0}
+.career-year-axis>div{gap:22px;padding:0 18px;height:44px;border:0;border-radius:0;background:none;box-shadow:none}
+.career-year-axis b{display:flex;align-items:baseline;gap:6px;color:#e0d5bd;font-size:14px;font-weight:500}
+.career-year-axis b small{color:var(--career-gold);font-size:9px;letter-spacing:.12em}
+.career-year-axis em{display:block;width:46px;height:1px;background:linear-gradient(90deg,rgba(199,168,106,.25),var(--career-gold),rgba(199,168,106,.25))}
+.career-company-block{position:relative;padding:0 0 42px}
+.career-company-title{position:relative;display:inline-block;isolation:isolate}
+.career-company-title:after{content:"";position:absolute;z-index:-1;left:-2%;right:-5%;bottom:8%;height:22%;opacity:.42;background:linear-gradient(90deg,rgba(172,126,55,.8),rgba(199,168,106,.34) 72%,transparent);clip-path:polygon(1% 25%,95% 0,100% 65%,76% 78%,44% 63%,0 100%);transform:rotate(-1deg)}
+.career-detail-company{position:relative;margin:0 0 10px}
+.career-detail-role{margin-bottom:26px}
+.career-detail-summary{font-size:clamp(14px,1.05vw,17px);line-height:1.9;color:#b8b8b2}
+.career-detail-list{padding:30px 0 0;margin:0;border-top:1px solid rgba(255,255,255,.09)}

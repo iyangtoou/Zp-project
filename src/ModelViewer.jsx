@@ -27,6 +27,7 @@ const ModelViewer = forwardRef(({ src, format, preview = false, onInfo, onSnapsh
     let disposed = false,
       frame = 0,
       observer,
+      startObserver,
       resizeObserver,
       renderer,
       scene,
@@ -266,10 +267,21 @@ const ModelViewer = forwardRef(({ src, format, preview = false, onInfo, onSnapsh
     };
     node.addEventListener("pointermove", pointer, { passive: true });
     node.addEventListener("pointerleave", leave);
-    start();
+    if (preview) {
+      startObserver = new IntersectionObserver(([entry]) => {
+        if (!entry.isIntersecting) return;
+        startObserver?.disconnect();
+        startObserver = null;
+        start();
+      }, { rootMargin: "280px" });
+      startObserver.observe(node);
+    } else {
+      start();
+    }
     return () => {
       disposed = true;
       cancelAnimationFrame(frame);
+      startObserver?.disconnect();
       observer?.disconnect();
       resizeObserver?.disconnect();
       controls?.dispose();

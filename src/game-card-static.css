@@ -1,0 +1,2 @@
+.selected-project-cards .editable-game-card{cursor:default}.selected-project-cards .editable-game-card:hover{transform:scale(1.025)}
+.editable-game-card .game-title-edit{position:absolute;z-index:4;left:11px;right:20px;bottom:11px;text-align:left}.editable-game-card .game-title-edit .project-editable{position:static;display:inline;cursor:text}

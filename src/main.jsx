@@ -31,6 +31,7 @@ import {
   ChevronDown,
   Volume2,
   VolumeX,
+  Trash2,
 } from "lucide-react";
 import LogoLoop from "./LogoLoop";
 import TextPressure from "./TextPressure";
@@ -38,8 +39,28 @@ import ModelViewer from "./ModelViewer";
 import "./model-overrides.css";
 import worksManifest from "virtual:works-manifest";
 import savedProjectCopy from "./assets/project-copy.json";
+import hiddenPlaceholders from "./assets/hidden-placeholders.json";
 import profilePortrait from "./assets/profile-rw.png";
+import placeholder01 from "./assets/works/参考占位源图/01-东方幻想世界观.jpg";
+import placeholder02 from "./assets/works/参考占位源图/02-失落文明场景概念.jpg";
+import placeholder03 from "./assets/works/参考占位源图/03-次世代叙事空间.jpg";
+import placeholder04 from "./assets/works/参考占位源图/04-云海之上的遗迹.jpg";
+import placeholder05 from "./assets/works/参考占位源图/05-异域植被探索.jpg";
+import placeholder06 from "./assets/works/参考占位源图/06-荒原叙事场景.jpg";
+import placeholder07 from "./assets/works/参考占位源图/07-静谧之境.jpg";
+import placeholder08 from "./assets/works/参考占位源图/08-远古通道.jpg";
+import placeholder09 from "./assets/works/参考占位源图/09-雪境边城.jpg";
+import placeholder10 from "./assets/works/参考占位源图/10-峡谷色彩稿.jpg";
+import placeholder11 from "./assets/works/参考占位源图/11-迷雾森林.jpg";
+import placeholder12 from "./assets/works/参考占位源图/12-海岸远征.jpg";
 import "./styles.css";
+import "./career-detail.css";
+import "./career-detail-refine.css";
+import "./contact-refine.css";
+import "./game-card-editor.css";
+import "./game-card-static.css";
+import "./project-detail-refine.css";
+import "./career-date-editor.css";
 import "./masonry.css";
 import "./experience.css";
 import "./hero-art.css";
@@ -55,6 +76,7 @@ import "./capability-loop.css";
 import "./profile-motion.css";
 import "./pressure-headings.css";
 import "./natural-masonry.css";
+import "./horizontal-masonry.css";
 import "./detail-fit.css";
 import "./filmstrip-polish.css";
 import "./detail-controls.css";
@@ -69,6 +91,7 @@ import "./work-filter.css";
 import "./drag-performance.css";
 import "./filmstrip-scrub.css";
 import "./profile-image.css";
+import "./cursor-stability.css";
 
 const projects = [
   {
@@ -77,8 +100,7 @@ const projects = [
     role: "美术主导 · 风格研发",
     tag: "WORLD BUILDING",
     layout: "wide",
-    image:
-      "https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=2200&q=90",
+    image: placeholder01,
   },
   {
     no: "02",
@@ -86,8 +108,7 @@ const projects = [
     role: "场景原画 · 氛围设计",
     tag: "ENVIRONMENT",
     layout: "tall",
-    image:
-      "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1600&q=90",
+    image: placeholder02,
   },
   {
     no: "03",
@@ -95,8 +116,7 @@ const projects = [
     role: "2D主美 · 团队协作",
     tag: "ART DIRECTION",
     layout: "square",
-    image:
-      "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1600&q=90",
+    image: placeholder03,
   },
   {
     no: "04",
@@ -104,8 +124,7 @@ const projects = [
     role: "概念设计 · 光影氛围",
     tag: "CONCEPT",
     layout: "landscape",
-    image:
-      "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1800&q=90",
+    image: placeholder04,
   },
   {
     no: "05",
@@ -113,8 +132,7 @@ const projects = [
     role: "场景设计 · 视觉探索",
     tag: "EXPLORATION",
     layout: "portrait",
-    image:
-      "https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?auto=format&fit=crop&w=1400&q=90",
+    image: placeholder05,
   },
   {
     no: "06",
@@ -122,8 +140,7 @@ const projects = [
     role: "场景原画 · 构图设计",
     tag: "STORYTELLING",
     layout: "wide",
-    image:
-      "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=2200&q=90",
+    image: placeholder06,
   },
   {
     no: "07",
@@ -131,8 +148,7 @@ const projects = [
     role: "氛围设计 · 色彩脚本",
     tag: "MOOD",
     layout: "square",
-    image:
-      "https://images.unsplash.com/photo-1510798831971-661eb04b3739?auto=format&fit=crop&w=1600&q=90",
+    image: placeholder07,
   },
   {
     no: "08",
@@ -140,8 +156,7 @@ const projects = [
     role: "空间设计 · 细节深化",
     tag: "ENVIRONMENT",
     layout: "landscape",
-    image:
-      "https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1800&q=90",
+    image: placeholder08,
   },
   {
     no: "09",
@@ -149,8 +164,7 @@ const projects = [
     role: "场景原画 · 建筑设计",
     tag: "LOCATION",
     layout: "tall",
-    image:
-      "https://images.unsplash.com/photo-1486911278844-a81c5267e227?auto=format&fit=crop&w=1400&q=90",
+    image: placeholder09,
   },
   {
     no: "10",
@@ -158,8 +172,7 @@ const projects = [
     role: "色彩设计 · 氛围探索",
     tag: "COLOR KEY",
     layout: "landscape",
-    image:
-      "https://images.unsplash.com/photo-1509316785289-025f5b846b35?auto=format&fit=crop&w=1800&q=90",
+    image: placeholder10,
   },
   {
     no: "11",
@@ -167,8 +180,7 @@ const projects = [
     role: "视觉研发 · 场景气氛",
     tag: "VISUAL DEV",
     layout: "portrait",
-    image:
-      "https://images.unsplash.com/photo-1425913397330-cf8af2ff40a1?auto=format&fit=crop&w=1400&q=90",
+    image: placeholder11,
   },
   {
     no: "12",
@@ -176,8 +188,7 @@ const projects = [
     role: "概念设计 · 叙事构图",
     tag: "KEYFRAME",
     layout: "square",
-    image:
-      "https://images.unsplash.com/photo-1510414842594-a61c69b5ae57?auto=format&fit=crop&w=1600&q=90",
+    image: placeholder12,
   },
 ];
 const uploadedProjects = worksManifest.map((file, i) => ({
@@ -189,11 +200,15 @@ const uploadedProjects = worksManifest.map((file, i) => ({
   type: file.type,
   layout: file.type === "model" ? "model" : "natural",
   image: file.image,
+  source: file.source || file.image,
+  poster: file.poster || null,
   mtime: file.mtime,
 }));
 const portfolioProjects = [
   ...uploadedProjects,
-  ...projects.map((p) => ({ ...p, id: `placeholder-${p.no}`, type: "image" })),
+  ...projects
+    .map((p) => ({ ...p, id: `placeholder-${p.no}`, type: "image" }))
+    .filter((p) => !hiddenPlaceholders.includes(p.id)),
 ].map((project) => ({ ...project, ...(savedProjectCopy[project.id] || {}) }));
 const projectForNo = (no) =>
   portfolioProjects.find((p) => p.no === no) ||
@@ -348,16 +363,27 @@ function Header() {
     [activeSection, setActiveSection] = useState("top");
   useEffect(() => {
     let scheduled = false;
+    let lastScrolled = false;
+    let lastActive = "top";
+    const sections = ["top", "work", "about", "experience", "ability"]
+      .map((id) => [id, document.getElementById(id)])
+      .filter(([, node]) => node);
     const update = () => {
       scheduled = false;
-      setScrolled(scrollY > 80);
+      const nextScrolled = scrollY > 80;
       const activationLine = innerHeight * 0.38;
       let currentSection = "top";
-      ["top", "work", "about", "experience", "ability"].forEach((id) => {
-        const section = document.getElementById(id);
+      sections.forEach(([id, section]) => {
         if (section && section.getBoundingClientRect().top <= activationLine) currentSection = id;
       });
-      setActiveSection(currentSection);
+      if (nextScrolled !== lastScrolled) {
+        lastScrolled = nextScrolled;
+        setScrolled(nextScrolled);
+      }
+      if (currentSection !== lastActive) {
+        lastActive = currentSection;
+        setActiveSection(currentSection);
+      }
     };
     const fn = () => { if (!scheduled) { scheduled = true; requestAnimationFrame(update); } };
     update();
@@ -411,7 +437,7 @@ function GenerativeBackdrop() {
       lastFrame = 0;
     const mouse = { x: 0.5, y: 0.5, tx: 0.5, ty: 0.5 };
     const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const particles = Array.from({ length: innerWidth < 800 ? 48 : 72 }, (_, i) => ({
+    const particles = Array.from({ length: innerWidth < 800 ? 36 : 56 }, (_, i) => ({
       x: Math.random(),
       y: Math.random(),
       r: Math.random() * 1.7 + 0.25,
@@ -421,7 +447,7 @@ function GenerativeBackdrop() {
       kind: i % 7 === 0,
     }));
     const resize = () => {
-      dpr = Math.min(devicePixelRatio || 1, innerWidth < 800 ? 1.15 : 1.4);
+      dpr = Math.min(devicePixelRatio || 1, innerWidth < 800 ? 1 : 1.25);
       w = canvas.clientWidth;
       h = canvas.clientHeight;
       canvas.width = w * dpr;
@@ -456,7 +482,7 @@ function GenerativeBackdrop() {
     };
     const draw = (now = 0) => {
       if (!active) return;
-      const interval = innerWidth < 800 ? 1000 / 30 : 1000 / 45;
+      const interval = innerWidth < 800 ? 1000 / 24 : 1000 / 30;
       if (now - lastFrame < interval) { frame = requestAnimationFrame(draw); return; }
       lastFrame = now;
       t += reduced ? 0 : 0.012;
@@ -678,12 +704,18 @@ function ProfilePortrait() {
             className="portrait-image portrait-image-base"
             src={profilePortrait}
             alt="杨杨 游戏原画设计师与游戏 2D 主美"
+            loading="lazy"
+            decoding="async"
+            fetchPriority="low"
           />
           <img
             className="portrait-image portrait-image-ghost"
             src={profilePortrait}
             alt=""
             aria-hidden="true"
+            loading="lazy"
+            decoding="async"
+            fetchPriority="low"
           />
           <i className="portrait-atmosphere" aria-hidden="true" />
         </div>
@@ -915,20 +947,13 @@ const formatMediaTime = (seconds) => {
   return `${String(minutes).padStart(2, "0")}:${String(remainder).padStart(2, "0")}`;
 };
 
-function GifPreview({ src, alt, interactive = true, active, className = "" }) {
-  const canvasRef = useRef(null);
+function GifPreview({ src, poster, alt, interactive = true, active, className = "" }) {
   const [localPlaying, setLocalPlaying] = useState(false);
   const [ratio, setRatio] = useState(null);
   const playing = active ?? localPlaying;
-  const capturePoster = (event) => {
+  const readRatio = (event) => {
     const img = event.currentTarget;
-    const scale = Math.min(1, 720 / Math.max(img.naturalWidth, img.naturalHeight));
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    canvas.width = Math.max(1, Math.round(img.naturalWidth * scale));
-    canvas.height = Math.max(1, Math.round(img.naturalHeight * scale));
-    canvas.getContext("2d")?.drawImage(img, 0, 0, canvas.width, canvas.height);
-    setRatio(img.naturalWidth / img.naturalHeight);
+    if (img.naturalWidth && img.naturalHeight) setRatio(img.naturalWidth / img.naturalHeight);
   };
   return (
     <div
@@ -937,13 +962,14 @@ function GifPreview({ src, alt, interactive = true, active, className = "" }) {
       onMouseEnter={interactive && active === undefined ? () => setLocalPlaying(true) : undefined}
       onMouseLeave={interactive && active === undefined ? () => setLocalPlaying(false) : undefined}
     >
-      <canvas ref={canvasRef} aria-hidden="true" />
       <img
         key={playing ? "playing" : "poster-loader"}
-        className={playing ? "gif-live" : "gif-loader"}
-        src={src}
+        className={playing ? "gif-live" : "gif-poster"}
+        src={playing ? src : (poster || src)}
         alt={playing ? alt : ""}
-        onLoad={capturePoster}
+        loading={playing ? "eager" : "lazy"}
+        decoding="async"
+        onLoad={readRatio}
         draggable="false"
       />
       <span className="media-kind">GIF</span>
@@ -1102,7 +1128,7 @@ function EditableText({ as: Tag = "div", value, onCommit, multiline = false, cla
   );
 }
 
-function Lightbox({ project, onClose, onSelect }) {
+function Lightbox({ project, onClose, onSelect, collection = portfolioProjects, closeOnBackdrop = false }) {
   const [view, setView] = useState({ scale: 1, x: 0, y: 0 });
   const [modelInfo, setModelInfo] = useState(null);
   const [modelSnapshots, setModelSnapshots] = useState(() => Object.fromEntries(modelPreviewCache));
@@ -1118,7 +1144,7 @@ function Lightbox({ project, onClose, onSelect }) {
     blockFilmClick = useRef(false),
     stageRef = useRef(null),
     viewerRef = useRef(null);
-  const currentIndex = portfolioProjects.findIndex(
+  const currentIndex = collection.findIndex(
       (p) => p.id === project.id || p.image === project.image,
     ),
     previousIndex = useRef(currentIndex);
@@ -1129,6 +1155,7 @@ function Lightbox({ project, onClose, onSelect }) {
     description: project.description || (project.type === "video" ? "以动态镜头呈现完整的视觉节奏与画面设计　可通过底部控制条查看任意时间节点" : project.type === "model" ? "模型支持全方位旋转与缩放查看　右侧数据由模型文件自动读取" : "围绕项目世界观与核心体验展开视觉探索　从前期参考研究　构图与色彩方案　到场景细化和最终研发落地　持续平衡叙事氛围　画面表现与生产可行性"),
     duty: "概念设计 · 风格研发 · 品质把控",
     process: project.type === "video" ? "播放 / 暂停 / 拖动进度" : "研究 / 草图 / 色彩 / 细化 / 交付",
+    companyId: "",
   };
   const projectCopyKey = project.id || project.image;
   const copy = { ...copyDefaults, ...(savedProjectCopy[projectCopyKey] || {}), ...projectCopy };
@@ -1199,10 +1226,11 @@ function Lightbox({ project, onClose, onSelect }) {
     const key = (e) => {
       if (e.key === "Escape") onClose();
     };
+    const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     addEventListener("keydown", key);
     return () => {
-      document.body.style.overflow = "";
+      document.body.style.overflow = previousOverflow;
       removeEventListener("keydown", key);
     };
   }, [onClose]);
@@ -1259,7 +1287,7 @@ function Lightbox({ project, onClose, onSelect }) {
     clearTimeout(session.timer);
     if (session.active) {
       blockFilmClick.current = true;
-      const nextProject = portfolioProjects[session.targetIndex];
+      const nextProject = collection[session.targetIndex];
       if (nextProject) onSelect(nextProject);
       setTimeout(() => { blockFilmClick.current = false; }, 120);
     }
@@ -1273,11 +1301,12 @@ function Lightbox({ project, onClose, onSelect }) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
+      onClick={closeOnBackdrop ? (event) => { event.stopPropagation(); onClose(); } : undefined}
     >
       <div className="lightbox-bar" onClick={(e) => e.stopPropagation()}>
         <div>
           <span>
-            {project.no} / {String(portfolioProjects.length).padStart(2, "0")}
+            {project.no} / {String(collection.length).padStart(2, "0")}
           </span>
           <strong>{copy.title}</strong>
         </div>
@@ -1323,7 +1352,7 @@ function Lightbox({ project, onClose, onSelect }) {
         <div
           ref={stageRef}
           className={
-            view.scale > 1 ? "lightbox-stage zoomed" : "lightbox-stage"
+            `lightbox-stage${view.scale > 1 ? " zoomed" : ""}${isGif ? " gif-stage" : ""}`
           }
           onClick={(e) => e.stopPropagation()}
           onWheel={(e) => {
@@ -1363,12 +1392,12 @@ function Lightbox({ project, onClose, onSelect }) {
               }}
             >
               {isModel ? (
-                <ModelViewer ref={viewerRef} src={project.image} format={project.id?.split(".").pop()} onInfo={setModelInfo} onSnapshot={(image) => { modelPreviewCache.set(project.id, image); setModelSnapshots((current) => ({ ...current, [project.id]: image })); }} />
+                <ModelViewer ref={viewerRef} src={project.source || project.image} format={project.id?.split(".").pop()} onInfo={setModelInfo} onSnapshot={(image) => { modelPreviewCache.set(project.id, image); setModelSnapshots((current) => ({ ...current, [project.id]: image })); }} />
               ) : isVideo ? (
                 <VideoDetail project={project} />
               ) : (
                 <motion.img
-                  src={project.image}
+                  src={project.source || project.image}
                   alt={project.title}
                   loading="eager"
                   decoding="async"
@@ -1407,6 +1436,12 @@ function Lightbox({ project, onClose, onSelect }) {
             <div><i>职责</i><EditableText as="b" value={copy.duty} onCommit={(value) => commitCopy("duty", value)} className="project-editable-meta" /></div>
             <div><i>流程</i><EditableText as="b" value={copy.process} onCommit={(value) => commitCopy("process", value)} className="project-editable-meta" /></div>
           </>}
+          {IS_LOCAL_EDITOR && <label className="project-company-field" title="选择该作品所属的工作经历">
+            <select aria-label="作品所属公司" value={copy.companyId || ""} onChange={(event) => commitCopy("companyId", event.target.value)}>
+              <option value="">未归属</option>
+              {career.map((item) => <option key={item.period} value={item.period}>{item.company}</option>)}
+            </select>
+          </label>}
         </aside>
       </div>
       <motion.div
@@ -1420,7 +1455,7 @@ function Lightbox({ project, onClose, onSelect }) {
         initial="hidden"
         animate="show"
       >
-        {portfolioProjects.map((p, i) => (
+        {collection.map((p, i) => (
           <motion.button
             key={p.id || p.no}
             data-film-index={i}
@@ -1442,7 +1477,7 @@ function Lightbox({ project, onClose, onSelect }) {
               onSelect(p);
             }}
           >
-            {p.type === "model" ? (modelSnapshots[p.id] ? <img className="model-static-thumb" src={modelSnapshots[p.id]} alt={`${p.title} 静态预览`} /> : <span className="model-thumb">3D</span>) : p.type === "video" ? <video src={p.image} muted playsInline preload="metadata" aria-label={`${p.title} 视频缩略图`} /> : p.type === "gif" ? <GifPreview src={p.image} alt={p.title} interactive={false} className="film-gif" /> : <img src={p.image} alt={p.title} loading="lazy" decoding="async" />}
+            {p.type === "model" ? (modelSnapshots[p.id] ? <img className="model-static-thumb" src={modelSnapshots[p.id]} alt={`${p.title} 静态预览`} /> : <span className="model-thumb">3D</span>) : p.type === "video" ? <video src={p.source || p.image} muted playsInline preload="none" aria-label={`${p.title} 视频缩略图`} /> : p.type === "gif" ? <GifPreview src={p.source || p.image} poster={p.poster} alt={p.title} interactive={false} className="film-gif" /> : <img src={p.image} alt={p.title} loading="lazy" decoding="async" />}
             <span>{String(i + 1).padStart(2, "0")}</span>
           </motion.button>
         ))}
@@ -1458,6 +1493,8 @@ function ProjectTile({
   dragging,
   onPointerDragStart,
   dropIntent,
+  onDelete,
+  deleting,
 }) {
   const [mediaHovered, setMediaHovered] = useState(false);
   const tile = useRef(null),
@@ -1494,19 +1531,19 @@ function ProjectTile({
   return (
     <motion.div
       className={`project-tile-shell ${project.layout} ${dragging ? "is-dragging" : ""} ${dropIntent ? `drop-${dropIntent}` : ""}`}
+      layout="position"
       style={{ viewTransitionName: `work-item-${portfolioProjects.findIndex((item) => item.id === project.id)}` }}
       initial={{ opacity: 0 }}
-      exit={{ opacity: 0, scale: 0.86, filter: "blur(5px)" }}
+      exit={{ opacity: 0, scale: 0.975, filter: "blur(1px)" }}
       whileInView={{ opacity: 1 }}
       viewport={{ once: true, amount: 0.18 }}
       transition={{
-        opacity: { duration: 0.7, delay: (index % 3) * 0.08 },
+        opacity: { duration: 0.28 },
+        layout: { duration: 0.42, ease: [0.22, 1, 0.36, 1] },
       }}
     >
       {dropIntent && (
         <div className={`drop-slot drop-slot-${dropIntent}`} aria-hidden="true">
-          <span>{dropIntent === "before" ? "↑" : "↓"}</span>
-          <b>插入此处</b>
           <i />
         </div>
       )}
@@ -1534,11 +1571,27 @@ function ProjectTile({
           if (e.key === "Enter") onOpen(project);
         }}
       >
-        {project.type === "model" ? <ModelViewer src={project.image} format={project.id?.split(".").pop()} preview /> : project.type === "video" ? <div ref={image} className="tile-media-transform"><video ref={video} src={project.image} muted playsInline loop preload="metadata" aria-label={`${project.title} 视频预览`} /><span className="media-kind">MP4</span></div> : project.type === "gif" ? <div ref={image} className="tile-media-transform"><GifPreview src={project.image} alt={project.title} active={mediaHovered} /></div> : <img ref={image} src={project.image} alt={project.title} loading="lazy" decoding="async" draggable="false" />}
+        {onDelete && (
+          <button
+            type="button"
+            className="work-delete"
+            aria-label={`删除作品 ${project.title}`}
+            title="删除该作品及本地数据"
+            disabled={deleting}
+            onPointerDown={(event) => event.stopPropagation()}
+            onClick={(event) => {
+              event.stopPropagation();
+              onDelete(project);
+            }}
+          >
+            <Trash2 aria-hidden="true" />
+            <span>{deleting ? "删除中" : "删除"}</span>
+          </button>
+        )}
+        {project.type === "model" ? <ModelViewer src={project.source || project.image} format={project.id?.split(".").pop()} preview /> : project.type === "video" ? <div ref={image} className="tile-media-transform"><video ref={video} src={project.source || project.image} muted playsInline loop preload="none" aria-label={`${project.title} 视频预览`} /><span className="media-kind">MP4</span></div> : project.type === "gif" ? <div ref={image} className="tile-media-transform"><GifPreview src={project.source || project.image} poster={project.poster} alt={project.title} active={mediaHovered} /></div> : <img ref={image} src={project.image} alt={project.title} loading="lazy" decoding="async" draggable="false" />}
         <div className="project-overlay" />
         <div className="project-tile-top">
           <span>{project.no}</span>
-          {project.tag && <span>{project.tag}</span>}
         </div>
         <div className="project-tile-copy">
           <h3>{project.title}</h3>
@@ -1561,6 +1614,11 @@ function Work({ onOpen }) {
   const [filterOpen, setFilterOpen] = useState(false);
   const [activeFilter, setActiveFilter] = useState(null);
   const [copyOverrides, setCopyOverrides] = useState({});
+  const [deletingId, setDeletingId] = useState(null);
+  const [mosaicColumns, setMosaicColumns] = useState(() => {
+    const width = window.innerWidth;
+    return width > 1450 ? 5 : width > 1050 ? 4 : width > 720 ? 3 : width > 460 ? 2 : 1;
+  });
   const [ordered, setOrdered] = useState(() => {
     try {
       const saved = JSON.parse(localStorage.getItem("yang-work-order") || "[]"),
@@ -1580,6 +1638,23 @@ function Work({ onOpen }) {
       JSON.stringify(ordered.map((p) => p.id)),
     );
   }, [ordered]);
+  useEffect(() => {
+    let frame = 0;
+    const updateColumns = () => {
+      if (frame) return;
+      frame = requestAnimationFrame(() => {
+        frame = 0;
+        const width = window.innerWidth;
+        const next = width > 1450 ? 5 : width > 1050 ? 4 : width > 720 ? 3 : width > 460 ? 2 : 1;
+        setMosaicColumns((current) => current === next ? current : next);
+      });
+    };
+    addEventListener("resize", updateColumns, { passive: true });
+    return () => {
+      removeEventListener("resize", updateColumns);
+      if (frame) cancelAnimationFrame(frame);
+    };
+  }, []);
   useEffect(() => {
     const close = (event) => {
       if (!filterRef.current?.contains(event.target)) setFilterOpen(false);
@@ -1635,9 +1710,37 @@ function Work({ onOpen }) {
     ...(copyOverrides[project.id] || {}),
   }));
   const visibleProjects = activeFilter ? displayOrdered.filter((project) => project.type === activeFilter) : displayOrdered;
+  const horizontalColumns = Array.from({ length: mosaicColumns }, () => []);
+  visibleProjects.forEach((project, index) => horizontalColumns[index % mosaicColumns].push({ project, index }));
+  const deleteProject = async (project) => {
+    if (!import.meta.env.DEV || deletingId) return;
+    if (!window.confirm(`确认删除作品“${project.title}”？\n\n源文件、优化预览和本地文字数据都会被删除，此操作不可撤销。`)) return;
+    setDeletingId(project.id);
+    try {
+      const response = await fetch('/__works-delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: project.id }),
+      });
+      const result = await response.json();
+      if (!response.ok || !result.ok) throw new Error(result.error || '删除失败');
+      modelPreviewCache.delete(project.id);
+      localStorage.removeItem(`yang-project-copy:${project.id}`);
+      setCopyOverrides((current) => {
+        const next = { ...current };
+        delete next[project.id];
+        return next;
+      });
+      setOrdered((current) => current.filter((item) => item.id !== project.id));
+    } catch (error) {
+      window.alert(`删除失败：${error.message}`);
+    } finally {
+      setDeletingId(null);
+    }
+  };
   const commitDrop = (movingId, target, side) => {
     if (!movingId || !target || movingId === target) return;
-    const updateOrder = () => flushSync(() => setOrdered((list) => {
+    flushSync(() => setOrdered((list) => {
       const from = list.findIndex((p) => p.id === movingId),
         next = [...list];
       if (from < 0) return list;
@@ -1647,13 +1750,13 @@ function Work({ onOpen }) {
       next.splice(targetIndex + (side === "after" ? 1 : 0), 0, moved);
       return next;
     }));
-    if (document.startViewTransition) document.startViewTransition(updateOrder);
-    else updateOrder();
   };
   const startPointerDrag = (event, id, title) => {
     const origin = { x: event.clientX, y: event.clientY };
+    const sourceElement = event.currentTarget;
     let active = false;
     let ghost = null;
+    let ghostFrame = 0;
     let lastPoint = origin;
     let localIntent = null;
     const updateTarget = () => {
@@ -1673,17 +1776,21 @@ function Work({ onOpen }) {
     };
     const activate = () => {
       active = true;
+      const sourceRect = sourceElement.getBoundingClientRect();
       dragId.current = id;
       setDragging(id);
       setDropIntent(null);
       document.body.classList.add("work-pointer-dragging");
-      ghost = document.createElement("div");
+      document.documentElement.style.setProperty("--work-drag-height", `${sourceRect.height}px`);
+      ghost = sourceElement.cloneNode(true);
       ghost.className = "work-drag-ghost is-visible";
-      const label = document.createElement("small");
-      const name = document.createElement("strong");
-      label.textContent = "MOVE / WORK";
-      name.textContent = title;
-      ghost.append(label, name);
+      ghost.setAttribute("aria-hidden", "true");
+      ghost.removeAttribute("tabindex");
+      ghost.querySelectorAll("button,.tile-open").forEach((node) => node.remove());
+      ghost.style.width = `${sourceRect.width}px`;
+      ghost.style.height = `${sourceRect.height}px`;
+      ghost.dataset.offsetX = String(origin.x - sourceRect.left);
+      ghost.dataset.offsetY = String(origin.y - sourceRect.top);
       document.body.appendChild(ghost);
     };
     const movePointer = (moveEvent) => {
@@ -1691,7 +1798,12 @@ function Work({ onOpen }) {
       if (!active && Math.hypot(lastPoint.x - origin.x, lastPoint.y - origin.y) >= 7) activate();
       if (!active) return;
       moveEvent.preventDefault();
-      if (ghost) ghost.style.transform = `translate3d(${lastPoint.x + 16}px,${lastPoint.y + 14}px,0)`;
+      if (ghost && !ghostFrame) ghostFrame = requestAnimationFrame(() => {
+        ghostFrame = 0;
+        const x = lastPoint.x - Number(ghost.dataset.offsetX || 0);
+        const y = lastPoint.y - Number(ghost.dataset.offsetY || 0);
+        ghost.style.transform = `translate3d(${x}px,${y}px,0) rotate(0.35deg) scale(1.015)`;
+      });
       updateTarget();
     };
     const finishPointer = () => {
@@ -1699,7 +1811,9 @@ function Work({ onOpen }) {
       document.removeEventListener("pointerup", finishPointer);
       document.removeEventListener("pointercancel", finishPointer);
       refreshDropTarget.current = null;
+      if (ghostFrame) cancelAnimationFrame(ghostFrame);
       ghost?.remove();
+      document.documentElement.style.removeProperty("--work-drag-height");
       document.body.classList.remove("work-pointer-dragging");
       if (active && localIntent) commitDrop(id, localIntent.id, localIntent.side);
       setDropIntent(null);
@@ -1768,20 +1882,26 @@ function Work({ onOpen }) {
           </AnimatePresence>
         </div>
       </div>
-      <div className={`project-mosaic ${dragging ? "is-reordering" : ""}`}>
-        <AnimatePresence mode="popLayout">
-        {visibleProjects.map((p, i) => (
-          <ProjectTile
-            key={p.id}
-            project={{ ...p, no: String(i + 1).padStart(2, "0") }}
-            index={i}
-            onOpen={onOpen}
-            dragging={dragging === p.id}
-            onPointerDragStart={startPointerDrag}
-            dropIntent={dropIntent?.id === p.id ? dropIntent.side : null}
-          />
+      <div className={`project-mosaic is-horizontal-order ${dragging ? "is-reordering" : ""}`} style={{ "--mosaic-columns": mosaicColumns }}>
+        {horizontalColumns.map((column, columnIndex) => (
+          <div className="project-mosaic-column" key={`column-${columnIndex}`}>
+            <AnimatePresence mode="popLayout">
+              {column.map(({ project: p, index: i }) => (
+                <ProjectTile
+                  key={p.id}
+                  project={{ ...p, no: String(i + 1).padStart(2, "0") }}
+                  index={i}
+                  onOpen={onOpen}
+                  dragging={dragging === p.id}
+                  onPointerDragStart={startPointerDrag}
+                  dropIntent={dropIntent?.id === p.id ? dropIntent.side : null}
+                  onDelete={import.meta.env.DEV ? deleteProject : null}
+                  deleting={deletingId === p.id}
+                />
+              ))}
+            </AnimatePresence>
+          </div>
         ))}
-        </AnimatePresence>
       </div>
     </section>
   );
@@ -1821,6 +1941,138 @@ function ProjectTypeTags() {
       ))}
     </div>
   );
+}
+
+function CareerDateEditor({ value, onCommit }) {
+  const parse = (source) => {
+    const matches = [...source.matchAll(/(\d{4})\.(\d{2})/g)];
+    return { startYear: matches[0]?.[1] || "2020", startMonth: matches[0]?.[2] || "01", endYear: matches[1]?.[1] || matches[0]?.[1] || "2020", endMonth: matches[1]?.[2] || matches[0]?.[2] || "01" };
+  };
+  const [date, setDate] = useState(() => parse(value));
+  useEffect(() => setDate(parse(value)), [value]);
+  const change = (field, maxLength) => (event) => setDate((current) => ({ ...current, [field]: event.target.value.replace(/\D/g, "").slice(0, maxLength) }));
+  const finish = () => {
+    const validYear = (year) => /^\d{4}$/.test(year), validMonth = (month) => /^(0[1-9]|1[0-2])$/.test(month);
+    if (!validYear(date.startYear) || !validYear(date.endYear) || !validMonth(date.startMonth) || !validMonth(date.endMonth)) { setDate(parse(value)); return; }
+    onCommit(`${date.startYear}.${date.startMonth} — ${date.endYear}.${date.endMonth}`);
+  };
+  const node = (side) => <b className="career-date-node">{IS_LOCAL_EDITOR ? <><input aria-label={`${side === "start" ? "开始" : "结束"}年份`} inputMode="numeric" maxLength="4" value={date[`${side}Year`]} onChange={change(`${side}Year`, 4)} onBlur={finish} /><input aria-label={`${side === "start" ? "开始" : "结束"}月份`} inputMode="numeric" maxLength="2" value={date[`${side}Month`]} onChange={change(`${side}Month`, 2)} onBlur={finish} /></> : <>{date[`${side}Year`]}<small>{date[`${side}Month`]}</small></>}</b>;
+  return <>{node("start")}<em />{node("end")}</>;
+}
+
+function CareerDetail({ item, onClose }) {
+  const dataKey = `career:${item.period}`;
+  const defaults = { company: item.company, period: item.period, role: item.role, detail: item.detail, more: item.more };
+  const [copy, setCopy] = useState(() => {
+    try { return { ...defaults, ...(savedProjectCopy[dataKey] || {}), ...JSON.parse(localStorage.getItem(`yang-project-copy:${dataKey}`) || "{}") }; }
+    catch { return defaults; }
+  });
+  const [workCopy, setWorkCopy] = useState({});
+  const [preview, setPreview] = useState(null);
+  const [scrollState, setScrollState] = useState({ visible: false, progress: 0, size: 0 });
+  const scrollTimer = useRef(0);
+  const save = (key, value) => {
+    localStorage.setItem(`yang-project-copy:${key}`, JSON.stringify(value));
+    window.dispatchEvent(new CustomEvent("project-copy-updated", { detail: { key, value } }));
+    if (IS_LOCAL_EDITOR) fetch("/__project-copy", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ key, value }) }).catch(() => {});
+  };
+  const commit = (field, value) => { const next = { ...copy, [field]: value }; setCopy(next); save(dataKey, next); };
+  const resolvedWorkCopy = (project) => {
+    const key = project.id || project.image;
+    let local = {};
+    try { local = JSON.parse(localStorage.getItem(`yang-project-copy:${key}`) || "{}"); } catch {}
+    return { ...(savedProjectCopy[key] || {}), ...local, ...(workCopy[key] || {}) };
+  };
+  let related = portfolioProjects.filter((project) => resolvedWorkCopy(project).companyId === item.period);
+  if (!related.length) {
+    const fallback = portfolioProjects.find((project) => project.no === item.projectNo) || projects.find((project) => project.no === item.projectNo);
+    if (fallback) related = [fallback];
+  }
+  useEffect(() => {
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const update = (event) => {
+      const { key, value } = event.detail || {};
+      if (key === dataKey) setCopy({ ...defaults, ...value });
+      else if (key && !key.startsWith("game:")) setWorkCopy((current) => ({ ...current, [key]: value }));
+    };
+    addEventListener("project-copy-updated", update);
+    return () => { clearTimeout(scrollTimer.current); document.body.style.overflow = previousOverflow; removeEventListener("project-copy-updated", update); };
+  }, [dataKey]);
+  useEffect(() => {
+    if (preview) return;
+    const close = (event) => { if (event.key === "Escape") onClose(); };
+    addEventListener("keydown", close);
+    return () => removeEventListener("keydown", close);
+  }, [preview, onClose]);
+  const handleCareerScroll = (event) => {
+    const node = event.currentTarget, range = Math.max(1, node.scrollHeight - node.clientHeight);
+    setScrollState({ visible: true, progress: node.scrollTop / range, size: Math.max(.16, node.clientHeight / node.scrollHeight) });
+    clearTimeout(scrollTimer.current);
+    scrollTimer.current = window.setTimeout(() => setScrollState((state) => ({ ...state, visible: false })), 760);
+  };
+  const dates = [...copy.period.matchAll(/(\d{4})\.(\d{2})/g)].map((match) => ({ year: match[1], month: match[2] }));
+  const startDate = dates[0] || { year: "—", month: "—" }, endDate = dates[1] || startDate;
+  return <motion.div className="career-detail-overlay" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose}>
+    <motion.section className="career-detail-panel" initial={{ y: 35, scale: .985 }} animate={{ y: 0, scale: 1 }} exit={{ y: 20, opacity: 0 }} onClick={(event) => event.stopPropagation()}>
+      <header className="career-detail-head"><span>CAREER ARCHIVE　工作经历</span><button onClick={onClose} aria-label="关闭"><X /></button></header>
+      <div className="career-detail-grid">
+        <article className="career-detail-copy" onScroll={handleCareerScroll}>
+          <div className="career-year-axis" aria-label={`任职时间 ${copy.period}`}>
+            <span>{Number(startDate.year) - 2}</span><i /><div><CareerDateEditor value={copy.period} onCommit={(value) => commit("period", value)} /></div><i /><span>{Number(endDate.year) + 1}</span>
+          </div>
+          <div className="career-company-block">
+            <div className="career-company-title"><EditableText as="h2" value={copy.company} onCommit={(value) => commit("company", value)} className="career-detail-company" /></div>
+            <EditableText as="strong" value={copy.role} onCommit={(value) => commit("role", value)} className="career-detail-role" />
+            <EditableText as="p" value={copy.detail} onCommit={(value) => commit("detail", value)} multiline className="career-detail-summary" />
+          </div>
+          <ol className="career-detail-list">{copy.more.map((line, index) => <li key={index}><EditableText as="span" value={line} onCommit={(value) => commit("more", copy.more.map((entry, i) => i === index ? value : entry))} multiline /></li>)}</ol>
+        </article>
+        <aside className="career-detail-media">
+          <div className="career-detail-section-title"><span>作品展示</span><small>{related.length} WORKS</small></div>
+          <div className="career-film">{related.length ? related.map((project) => <button key={project.id || project.image} onClick={() => setPreview(project)}><img src={project.poster || project.image} alt="" loading="lazy" decoding="async" /><span>{resolvedWorkCopy(project).title || project.title}</span></button>) : <div className="career-empty">可在任一作品的大图模式中设置归属公司</div>}</div>
+        </aside>
+        <div className={`career-scroll-indicator ${scrollState.visible ? "is-visible" : ""}`}><span style={{ height: `${scrollState.size * 100}%`, transform: `translateY(${scrollState.progress * (100 / scrollState.size - 100)}%)` }} /></div>
+      </div>
+    </motion.section>
+    <AnimatePresence>{preview && <Lightbox project={preview} collection={related} closeOnBackdrop onSelect={setPreview} onClose={() => setPreview(null)} />}</AnimatePresence>
+  </motion.div>;
+}
+
+function EditableGameCard({ game, index, project }) {
+  const dataKey = `game:${game.name}`;
+  const defaults = { title: game.name, cover: project?.poster || project?.image || "" };
+  const [copy, setCopy] = useState(() => {
+    try { return { ...defaults, ...(savedProjectCopy[dataKey] || {}), ...JSON.parse(localStorage.getItem(`yang-project-copy:${dataKey}`) || "{}") }; }
+    catch { return defaults; }
+  });
+  const inputRef = useRef(null);
+  const save = (next) => {
+    setCopy(next);
+    localStorage.setItem(`yang-project-copy:${dataKey}`, JSON.stringify(next));
+    window.dispatchEvent(new CustomEvent("project-copy-updated", { detail: { key: dataKey, value: next } }));
+    fetch("/__project-copy", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ key: dataKey, value: next }) }).catch(() => {});
+  };
+  const uploadCover = (event) => {
+    const file = event.target.files?.[0];
+    if (!file || !file.type.startsWith("image/")) return;
+    const reader = new FileReader();
+    reader.onload = async () => {
+      try {
+        const response = await fetch("/__game-cover", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ key: game.name, dataUrl: reader.result }) });
+        const result = await response.json();
+        if (result.ok) save({ ...copy, cover: result.url });
+      } catch {}
+    };
+    reader.readAsDataURL(file);
+    event.target.value = "";
+  };
+  return <button className="editable-game-card" type="button" style={{ "--delay": `${-index * .8}s` }} onClick={(event) => event.preventDefault()}>
+    <img src={copy.cover} alt="" loading="lazy" decoding="async" />
+    <i>{String(index + 1).padStart(2, "0")}</i>
+    <span className="game-title-edit" onClick={(event) => event.stopPropagation()} onPointerDown={(event) => event.stopPropagation()}><EditableText as="strong" value={`《${copy.title}》`} onCommit={(value) => save({ ...copy, title: value.replace(/[《》]/g, "") })} /></span>
+    {IS_LOCAL_EDITOR && <><span className="game-card-edit-hint" onClick={(event) => { event.stopPropagation(); inputRef.current?.click(); }}>更换封面</span><input ref={inputRef} className="game-card-cover-input" type="file" accept="image/png,image/jpeg,image/webp" onChange={uploadCover} onClick={(event) => event.stopPropagation()} /></>}
+  </button>;
 }
 
 function Experience({ onOpen }) {
@@ -1901,9 +2153,8 @@ function Experience({ onOpen }) {
               whileInView={{ opacity: 1 }}
               viewport={{ once: true, amount: 0.35 }}
               transition={{ delay: i * 0.06 }}
-              onClick={() =>
-                onOpen(projects.find((p) => p.no === item.projectNo))
-              }
+              onClick={() => onOpen(item)}
+              onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); onOpen(item); } }}
               tabIndex="0"
             >
               <time>{item.period}</time>
@@ -1928,18 +2179,7 @@ function Experience({ onOpen }) {
             <div className="selected-project-cards">
               {selectedGames.map((game, i) => {
                 const p = projects.find((item) => item.no === game.projectNo);
-                return (
-                  <button
-                    key={game.name}
-                    style={{ "--delay": `${-i * 0.8}s` }}
-                    onClick={() => onOpen(p)}
-                  >
-                    <img src={p.image} alt="" loading="lazy" decoding="async" />
-                    <i>{String(i + 1).padStart(2, "0")}</i>
-                    <strong>《{game.name}》</strong>
-                    <ArrowUpRight />
-                  </button>
-                );
+                return <EditableGameCard key={game.name} game={game} index={i} project={p} />;
               })}
             </div>
           </div>
@@ -1991,23 +2231,26 @@ function Ability() {
 }
 
 function Contact() {
+  const [pdfOptionsOpen, setPdfOptionsOpen] = useState(false);
+  const [includeWorks, setIncludeWorks] = useState(false);
+  const exportPdf = () => {
+    document.body.classList.toggle("print-with-works", includeWorks);
+    setPdfOptionsOpen(false);
+    window.setTimeout(() => window.print(), 80);
+    const cleanup = () => { document.body.classList.remove("print-with-works"); removeEventListener("afterprint", cleanup); };
+    addEventListener("afterprint", cleanup);
+  };
   return (
     <footer id="contact">
+      <div className="contact-atmosphere" aria-hidden="true"><i /><i /><i /></div>
       <div className="footer-bg">杨</div>
       <div className="footer-top">
         <span>05 / CONTACT</span>
         <span>AVAILABLE FOR SELECTED PROJECTS</span>
       </div>
       <div className="footer-main">
-        <p>
-          下一段世界观，
-          <br />
-          从一次对话开始。
-        </p>
-        <Magnetic className="contact-orbit" href="mailto:iq.yang@aliyun.com">
-          <span>LET'S TALK</span>
-          <ArrowUpRight />
-        </Magnetic>
+        <p><span>下一段世界观</span><span>从一次对话开始</span></p>
+        <a className="contact-mark" href="mailto:iq.yang@aliyun.com" aria-label="发送邮件联系杨杨"><i>Y</i><b>YANG</b><small>CONTACT</small></a>
       </div>
       <div className="footer-actions">
         <a href="mailto:iq.yang@aliyun.com">
@@ -2020,7 +2263,7 @@ function Contact() {
           <strong>133 3098 2143</strong>
           <ArrowUpRight />
         </a>
-        <button onClick={() => window.print()}>
+        <button onClick={() => setPdfOptionsOpen(true)}>
           <Download /> <span>简历下载</span>
           <strong>保存当前网页为 PDF</strong>
           <ArrowDownRight />
@@ -2031,12 +2274,14 @@ function Contact() {
         <span>GAME CONCEPT ART · ART DIRECTION</span>
         <a href="#top">BACK TO TOP ↑</a>
       </div>
+      <AnimatePresence>{pdfOptionsOpen && <motion.div className="pdf-options" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setPdfOptionsOpen(false)}><motion.div initial={{ y: 18, opacity: 0 }} animate={{ y: 0, opacity: 1 }} onClick={(event) => event.stopPropagation()}><span>PDF EXPORT</span><h3>保存个人简历</h3><p>默认仅保存个人介绍、工作履历与能力信息，不包含作品图片。</p><label><input type="checkbox" checked={includeWorks} onChange={(event) => setIncludeWorks(event.target.checked)} /><i />同时包含作品集图片</label><div><button onClick={() => setPdfOptionsOpen(false)}>取消</button><button onClick={exportPdf}>继续保存</button></div></motion.div></motion.div>}</AnimatePresence>
     </footer>
   );
 }
 
 function App() {
   const [selected, setSelected] = useState(null);
+  const [selectedCareer, setSelectedCareer] = useState(null);
   return (
     <>
       <Header />
@@ -2044,11 +2289,12 @@ function App() {
       <main>
         <Work onOpen={setSelected} />
         <About />
-        <Experience onOpen={setSelected} />
+        <Experience onOpen={setSelectedCareer} />
         <Ability />
       </main>
       <Contact />
       <AnimatePresence>
+        {selectedCareer && <CareerDetail item={selectedCareer} onClose={() => setSelectedCareer(null)} />}
         {selected && (
           <Lightbox
             project={selected}
