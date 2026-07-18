@@ -1,0 +1,141 @@
+/* 2026 visual refinement — restrained editorial motion and clearer hierarchy. */
+:root {
+  --ink: #080907;
+  --paper: #d8d4c9;
+  --accent: #b8945f;
+  --line: rgba(255, 255, 255, 0.105);
+  --career-blue: #12253d;
+  --motion-fast: 220ms;
+  --motion-ui: 360ms;
+  --motion-reveal: 760ms;
+  --ease-out-art: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Three content widths: gallery, archive, and long-form copy. */
+.work { max-width: 1700px; padding-top: 126px; }
+.about,
+.experience,
+.ability { max-width: 1500px; }
+.about-copy,
+.timeline,
+.career-detail-copy { --copy-width: 1160px; }
+.about-summary { max-width: min(100%, var(--copy-width)); }
+
+/* Section rhythm: less empty runway, more deliberate grouping. */
+.work-intro { margin: 70px 0 34px !important; }
+.work-gallery-toolbar { margin-bottom: 26px; }
+.about-grid { margin-top: 78px; gap: clamp(64px, 7vw, 118px); }
+.experience-intro { margin: 70px 0 72px; }
+.ability-title { margin: 72px 0 68px; }
+.about-copy > .pressure-heading { margin-bottom: 40px; }
+.work-gallery { padding-bottom: 170px; }
+
+/* A consistent title system without turning every heading into a spectacle. */
+.pressure-heading::before { width: 38px; box-shadow: 54px 0 0 rgba(184, 148, 95, 0.25); }
+.work-intro .pressure-heading .text-pressure > div { font-weight: 430 !important; letter-spacing: -0.045em !important; }
+.about-pressure .text-pressure > div { font-weight: 520 !important; }
+.experience-intro .pressure-heading .text-pressure > div { font-family: "Noto Serif SC", serif !important; font-weight: 430 !important; }
+.ability-title .pressure-heading .text-pressure > div { font-weight: 420 !important; letter-spacing: -0.035em !important; }
+
+/* Cards stay still at rest; the work itself supplies the visual energy. */
+.project-tile-shell,
+.project-tile-shell:nth-child(2n),
+.project-tile-shell:nth-child(3n) { animation: none !important; }
+.project-mosaic.is-horizontal-order { gap: 16px; }
+.project-tile {
+  border-radius: 2px;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.055);
+  transition: transform var(--motion-ui) var(--ease-out-art), box-shadow var(--motion-ui) ease, opacity var(--motion-ui) ease, filter var(--motion-ui) ease;
+}
+.project-tile img,
+.project-tile video,
+.project-tile .gif-preview canvas {
+  filter: saturate(0.72) contrast(1.025) brightness(0.79);
+  transition: transform 620ms var(--ease-out-art), filter 420ms ease;
+}
+.project-tile:hover {
+  z-index: 4;
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.46), 0 0 0 1px rgba(184, 148, 95, 0.22);
+}
+.project-tile:hover img,
+.project-tile:hover video,
+.project-tile:hover .gif-preview canvas {
+  filter: saturate(0.92) contrast(1.02) brightness(0.86);
+}
+.project-mosaic:has(.project-tile:hover) .project-tile:not(:hover) {
+  opacity: 0.78;
+  filter: brightness(0.9);
+}
+.project-tile-copy h3 { color: var(--paper); text-shadow: 0 2px 14px rgba(0, 0, 0, 0.72); }
+.project-tile-copy p { color: #c0b9aa; }
+.project-overlay { background: linear-gradient(180deg, rgba(4, 5, 4, 0.06) 38%, rgba(4, 5, 4, 0.78) 100%); }
+.tile-open { width: 32px; height: 32px; right: 15px; bottom: 15px; border-radius: 3px; }
+.media-kind,
+.model-badge {
+  min-width: 29px;
+  padding: 4px 6px;
+  border-radius: 3px;
+  font-size: 7px;
+  letter-spacing: 0.12em;
+  background: rgba(7, 8, 7, 0.68);
+  backdrop-filter: blur(7px);
+}
+
+/* Quiet, single-purpose large-view transitions. */
+.lightbox { background: rgba(5, 6, 5, 0.975); }
+.lightbox-image-frame { will-change: transform, opacity; }
+.lightbox-hint {
+  opacity: 0;
+  transform: translate(-50%, 5px);
+  transition: opacity 320ms ease, transform 420ms var(--ease-out-art);
+}
+.lightbox-hint.is-visible { opacity: 1; transform: translate(-50%, 0); }
+.filmstrip button { border-radius: 4px; transition-duration: 320ms; }
+.filmstrip button.active {
+  border-color: rgba(202, 164, 103, 0.8);
+  box-shadow: 0 0 0 1px rgba(184, 148, 95, 0.18), 0 10px 24px rgba(0, 0, 0, 0.42);
+}
+.filmstrip button.active::before,
+.filmstrip button.active::after { animation: none !important; opacity: 0 !important; }
+.filmstrip:has(button:hover) button:not(:hover):not(.active) { transform: scale(0.96); opacity: 0.4; }
+.project-detail { background: linear-gradient(180deg, #0d0e0c, #090a09); }
+.project-detail > p { max-width: 32em; }
+
+/* Capability cards read as one system and use a single restrained lift. */
+.ability-card { min-height: 410px; transition: background var(--motion-ui) ease, transform var(--motion-ui) var(--ease-out-art), opacity var(--motion-ui) ease; }
+.ability-grid:has(.ability-card:hover) .ability-card:not(:hover) { opacity: 0.55; }
+.ability-card:hover { transform: translateY(-6px); background: rgba(184, 148, 95, 0.055); }
+
+/* Small persistent identity marks rather than extra decoration. */
+.section-head::after {
+  content: "YY / 001";
+  margin-left: auto;
+  padding-left: 28px;
+  color: rgba(184, 148, 95, 0.46);
+  font: 8px/1 Outfit, sans-serif;
+  letter-spacing: 0.18em;
+}
+.section-head > p { margin-left: 22px; }
+
+@media (max-width: 900px) {
+  .work { padding-top: 92px; }
+  .work-intro { margin: 54px 0 24px !important; }
+  .about-grid { margin-top: 58px; }
+  .experience-intro { margin: 56px 0 52px; }
+  .ability-title { margin: 56px 0 48px; }
+  .project-mosaic:has(.project-tile:hover) .project-tile:not(:hover),
+  .ability-grid:has(.ability-card:hover) .ability-card:not(:hover) { opacity: 1; filter: none; }
+  .project-tile img,
+  .project-tile video,
+  .project-tile .gif-preview canvas { filter: saturate(0.76) brightness(0.82); }
+  .section-head::after { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .project-tile,
+  .project-tile img,
+  .project-tile video,
+  .lightbox-hint,
+  .filmstrip button,
+  .ability-card { transition-duration: 1ms !important; }
+}

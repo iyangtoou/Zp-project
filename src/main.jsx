@@ -93,6 +93,7 @@ import "./drag-performance.css";
 import "./filmstrip-scrub.css";
 import "./profile-image.css";
 import "./cursor-stability.css";
+import "./refinement.css";
 import "./mobile.css";
 
 const projects = [
@@ -1150,6 +1151,7 @@ function Lightbox({ project, onClose, onSelect, collection = portfolioProjects, 
   const [projectCopy, setProjectCopy] = useState({});
   const [scrubIndex, setScrubIndex] = useState(null);
   const [scrubbing, setScrubbing] = useState(false);
+  const [hintVisible, setHintVisible] = useState(true);
   const isModel = project.type === "model";
   const isVideo = project.type === "video";
   const isGif = project.type === "gif";
@@ -1218,12 +1220,17 @@ function Lightbox({ project, onClose, onSelect, collection = portfolioProjects, 
   };
   useEffect(() => {
     setModelInfo(null);
+    setHintVisible(true);
     reset();
     try {
       setProjectCopy(JSON.parse(localStorage.getItem(`yang-project-copy:${projectCopyKey}`) || "{}"));
     } catch {
       setProjectCopy({});
     }
+  }, [project.id, project.image]);
+  useEffect(() => {
+    const timer = window.setTimeout(() => setHintVisible(false), 3200);
+    return () => window.clearTimeout(timer);
   }, [project.id, project.image]);
   useEffect(() => {
     previousIndex.current = currentIndex;
@@ -1261,6 +1268,11 @@ function Lightbox({ project, onClose, onSelect, collection = portfolioProjects, 
       x: origin.ox + e.clientX - origin.x,
       y: origin.oy + e.clientY - origin.y,
     }));
+  };
+  const stagePointerMove = (event) => {
+    if (!isModel && !isVideo) pointerMove(event);
+    const rect = stageRef.current?.getBoundingClientRect();
+    if (rect && event.clientY > rect.bottom - 86) setHintVisible(true);
   };
   const beginFilmScrub = (event) => {
     if (event.button !== 0) return;
@@ -1378,7 +1390,8 @@ function Lightbox({ project, onClose, onSelect, collection = portfolioProjects, 
           }}
           onDoubleClick={reset}
           onPointerDown={isModel || isVideo ? undefined : pointerDown}
-          onPointerMove={isModel || isVideo ? undefined : pointerMove}
+          onPointerMove={stagePointerMove}
+          onPointerLeave={() => setHintVisible(false)}
           onPointerUp={() => (drag.current = null)}
           onPointerCancel={() => (drag.current = null)}
         >
@@ -1388,22 +1401,16 @@ function Lightbox({ project, onClose, onSelect, collection = portfolioProjects, 
               className={`lightbox-image-frame ${isModel ? "model-frame" : ""} ${isVideo ? "video-frame" : ""}`}
               initial={{
                 opacity: 0,
-                x: slideDirection * 150,
-                scale: 0.82,
-                filter: "blur(6px)",
+                x: slideDirection * 96,
               }}
-              animate={{ opacity: 1, x: 0, scale: 1, filter: "blur(0px)" }}
+              animate={{ opacity: 1, x: 0 }}
               exit={{
                 opacity: 0,
-                x: slideDirection * -110,
-                scale: 0.9,
-                filter: "blur(4px)",
+                x: slideDirection * -72,
               }}
               transition={{
-                type: "spring",
-                stiffness: 145,
-                damping: 23,
-                mass: 0.82,
+                duration: 0.48,
+                ease: [0.22, 1, 0.36, 1],
               }}
             >
               {isModel ? (
@@ -1424,7 +1431,7 @@ function Lightbox({ project, onClose, onSelect, collection = portfolioProjects, 
               )}
             </motion.div>
           </AnimatePresence>
-          {!isVideo && <div className="lightbox-hint">
+          {!isVideo && <div className={`lightbox-hint${hintVisible ? " is-visible" : ""}`}>
             {isModel ? "拖动旋转 · 滚轮缩放 · 双击复位 · ESC 关闭" : isGif ? "GIF 自动播放 · 滚轮缩放 · 拖动平移 · ESC 关闭" : "滚轮缩放 · 拖动平移 · 双击复位 · ESC 关闭"}
           </div>}
         </div>
@@ -1527,8 +1534,8 @@ function ProjectTile({
       const r = tile.current.getBoundingClientRect(),
         x = (pendingPoint.current.x - r.left - r.width / 2) / r.width,
         y = (pendingPoint.current.y - r.top - r.height / 2) / r.height;
-      tile.current.style.transform = `translate3d(${x * 14}px,${y * 14}px,0) scale(1.012)`;
-      if (image.current) image.current.style.transform = `scale(1.045) translate3d(${-x * 8}px,${-y * 8}px,0)`;
+      tile.current.style.transform = `translate3d(${x * 8}px,${y * 8}px,0) scale(1.006)`;
+      if (image.current) image.current.style.transform = `scale(1.025) translate3d(${-x * 5}px,${-y * 5}px,0)`;
     });
   };
   const resetTile = () => {
