@@ -61,6 +61,7 @@ import "./game-card-editor.css";
 import "./game-card-static.css";
 import "./project-detail-refine.css";
 import "./career-date-editor.css";
+import "./visitor-permissions.css";
 import "./masonry.css";
 import "./experience.css";
 import "./hero-art.css";
@@ -92,6 +93,7 @@ import "./drag-performance.css";
 import "./filmstrip-scrub.css";
 import "./profile-image.css";
 import "./cursor-stability.css";
+import "./mobile.css";
 
 const projects = [
   {
@@ -390,6 +392,19 @@ function Header() {
     addEventListener("scroll", fn, { passive: true });
     return () => removeEventListener("scroll", fn);
   }, []);
+  useEffect(() => {
+    if (!open) return undefined;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const closeOnEscape = (event) => {
+      if (event.key === "Escape") setOpen(false);
+    };
+    addEventListener("keydown", closeOnEscape);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      removeEventListener("keydown", closeOnEscape);
+    };
+  }, [open]);
   return (
     <header className={scrolled ? "nav scrolled" : "nav"}>
       <a className="logo" href="#top">
@@ -416,7 +431,7 @@ function Header() {
       <Magnetic className="nav-contact">
         联系我 <ArrowUpRight size={16} />
       </Magnetic>
-      <button className="menu" onClick={() => setOpen(!open)}>
+      <button className="menu" onClick={() => setOpen(!open)} aria-label={open ? "关闭导航" : "打开导航"} aria-expanded={open}>
         {open ? <X /> : <Menu />}
       </button>
     </header>
@@ -1555,7 +1570,7 @@ function ProjectTile({
         onPointerDown={(e) => {
           if (e.button !== 0) return;
           resetTile();
-          onPointerDragStart(e, project.id, project.title);
+          if (onPointerDragStart) onPointerDragStart(e, project.id, project.title);
         }}
         onMouseMove={move}
         onMouseEnter={() => {
@@ -1620,6 +1635,7 @@ function Work({ onOpen }) {
     return width > 1450 ? 5 : width > 1050 ? 4 : width > 720 ? 3 : width > 460 ? 2 : 1;
   });
   const [ordered, setOrdered] = useState(() => {
+    if (!IS_LOCAL_EDITOR) return portfolioProjects;
     try {
       const saved = JSON.parse(localStorage.getItem("yang-work-order") || "[]"),
         map = new Map(portfolioProjects.map((p) => [p.id, p])),
@@ -1633,6 +1649,7 @@ function Work({ onOpen }) {
     }
   });
   useEffect(() => {
+    if (!IS_LOCAL_EDITOR) return;
     localStorage.setItem(
       "yang-work-order",
       JSON.stringify(ordered.map((p) => p.id)),
@@ -1752,6 +1769,7 @@ function Work({ onOpen }) {
     }));
   };
   const startPointerDrag = (event, id, title) => {
+    if (!IS_LOCAL_EDITOR) return;
     const origin = { x: event.clientX, y: event.clientY };
     const sourceElement = event.currentTarget;
     let active = false;
@@ -1882,7 +1900,7 @@ function Work({ onOpen }) {
           </AnimatePresence>
         </div>
       </div>
-      <div className={`project-mosaic is-horizontal-order ${dragging ? "is-reordering" : ""}`} style={{ "--mosaic-columns": mosaicColumns }}>
+      <div className={`project-mosaic is-horizontal-order ${IS_LOCAL_EDITOR ? "is-local-editor" : "is-visitor-view"} ${dragging ? "is-reordering" : ""}`} style={{ "--mosaic-columns": mosaicColumns }}>
         {horizontalColumns.map((column, columnIndex) => (
           <div className="project-mosaic-column" key={`column-${columnIndex}`}>
             <AnimatePresence mode="popLayout">
@@ -1893,7 +1911,7 @@ function Work({ onOpen }) {
                   index={i}
                   onOpen={onOpen}
                   dragging={dragging === p.id}
-                  onPointerDragStart={startPointerDrag}
+                  onPointerDragStart={IS_LOCAL_EDITOR ? startPointerDrag : undefined}
                   dropIntent={dropIntent?.id === p.id ? dropIntent.side : null}
                   onDelete={import.meta.env.DEV ? deleteProject : null}
                   deleting={deletingId === p.id}

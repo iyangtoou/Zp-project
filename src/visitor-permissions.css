@@ -1,0 +1,1 @@
+.project-mosaic.is-visitor-view .project-tile{cursor:pointer;touch-action:pan-y}.project-mosaic.is-visitor-view .project-tile-shell{user-select:none}.project-mosaic.is-local-editor .project-tile{cursor:grab}.project-mosaic.is-local-editor.is-reordering .project-tile{cursor:grabbing}
